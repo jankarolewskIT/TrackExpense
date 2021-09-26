@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ expence.category }}
+    {{ category }}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ expences }}</h1>
+    <h1>Category: {{ category }}</h1>
+    <p>Sum wydatków w kategorii: {{ total_category_expences }}</p>
+    <p>Udział wydatków kategorii do wszystkich wydatków: {{ category_to_all }}</p>
+    <p>Udział wydatków kategorii w budżecie: {{ category_to_budget }}</p>
 
+    <a href="{% url "home" %}">(BACK)</a>
 {% endblock %}
+
