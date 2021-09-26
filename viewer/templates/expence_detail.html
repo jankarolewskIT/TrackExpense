@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ expence }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ expence.name }}</h1>
+<h3>{{ expence.value }}</h3>
+<h3><a>{{ expence.category }}</a></h3>
+<h3>{{ expence.date }}</h3>
+
+<a href="{% url "home" %}">(BACK)</a>
+
+{% endblock %}

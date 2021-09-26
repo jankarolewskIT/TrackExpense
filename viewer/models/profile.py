@@ -6,4 +6,3 @@ class Profile(Model):
     user = OneToOneField(User, on_delete=CASCADE)
     income = DecimalField(max_digits=1000000, decimal_places=2)
 
-
