@@ -10,3 +10,11 @@ class Budget(Model):
 
     def add_to_balance(self, income):
         self.total_budget += income
+
+    def __str__(self):
+        if self.profile.user.first_name:
+            user = self.profile.user.first_name
+        else:
+            user = self.profile.user.username
+
+        return f"{user}'s {self.name}"
