@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ user }}
+    {{ user.username }}
 {% endblock %}
 
 {% block expence_list %}
-    {% for obj in object_list %}
-    <li>
-        <p><a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}</p>
-    </li>
-    {% endfor %}
+    {% if user.is_authenticated %}
+
+        {% for obj in object_list %}
+        <li>
+            <p><a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}</p>
+        </li>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
