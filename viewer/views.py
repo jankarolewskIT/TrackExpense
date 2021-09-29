@@ -1,71 +1,30 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.views.generic import TemplateView, ListView, DetailView, View
-from django.contrib.auth.views import LoginView, PasswordChangeView, LogoutView
-from django.db.models import Sum
+from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, get_object_or_404
-
 from django.shortcuts import render
+from django.views.generic import TemplateView, DetailView, View
 
-import TrackExpences.settings
 from viewer.models.expence import Expence
-from viewer.models.budget import Budget
-from viewer.models.profile import Profile
 
 
 class ProfileView(LoginRequiredMixin, View):
     model = Expence
-    success_url = reverse_lazy("home")
 
-    def get(self, request, user):
-        user_obj = Profile.objects.filter(user__username=user)[0]
-        budget_obj = Budget.objects.filter(profile=user_obj)
-        object_list = Expence.objects.filter(budget=budget_obj[0])
+    def get(self, request):
+        budget = self.request.user.profile.budget
+        queryset = Expence.objects.filter(budget=budget)
+
         return render(
             request, template_name="profile.html",
             context={
-                "object_list": object_list,
-                "budget_obj": budget_obj,
-                "user_obj": user_obj,
+                "expenses": queryset
             }
         )
 
 
-# class SubmitableLogoutView(LogoutView):
-#     template_name = "home.html"
-#     success_url = reverse_lazy("welcome")
-
-
-class SubmitableLoginView(View):
-    # template_name = "form.html"
-    # success_url = reverse_lazy("home/")
-
-    def get(self, request):
-        username = None
-        if request.user.is_authenticated():
-            username = request.user.username
-
-        return render(
-            request, template_name="form.html",
-            context={
-                "username": username,
-            }
-        )
-
-
-# def redirect_view(request):
-#     username = None
-#     if request.user.is_authenticated():
-#         username = request.user.username
-#     response = redirect('/redirect-success/')
-#     return response
-
-
-def go_to_profile(request):
-    user = request.user.username
-    login_url = f"{TrackExpences.settings.LOGIN_REDIRECT_URL}/{user}"
-    return redirect(f"{login_url}")
+class SubmitableLoginView(LoginView):
+    template_name = "form.html"
+    success_url = reverse_lazy("home")
 
 
 class WelcomeView(TemplateView):

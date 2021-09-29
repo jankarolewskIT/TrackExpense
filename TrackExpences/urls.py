@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from viewer.models import Budget, Profile, Expence
-from django.contrib.auth.views import LogoutView, LoginView
-from viewer.views import WelcomeView, go_to_profile, SubmitableLoginView
+from django.contrib.auth.views import LogoutView
+from viewer.views import WelcomeView, SubmitableLoginView
 
 admin.site.register(Budget)
 admin.site.register(Expence)

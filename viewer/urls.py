@@ -17,7 +17,7 @@ from django.urls import path
 from viewer.views import ProfileView, ExpenceDetailView, CategoryDetailView
 
 urlpatterns = [
-    path('<user>', ProfileView.as_view(), name="home"),
+    path('', ProfileView.as_view(), name="home"),
     path('expence/detail/<pk>/', ExpenceDetailView.as_view(), name="expence_detail"),
     path('category/detail/<category_short>/', CategoryDetailView.as_view(), name="category_detail"),
 ]
