@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView
 
 from viewer.models.expence import Expence
@@ -90,7 +90,16 @@ class EditBudgetView(UpdateView):
     fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
     success_url = reverse_lazy("home")
-    model = Budget
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        budget_id = self.request.user.profile.budget.id
+        return get_object_or_404(Budget, id=budget_id)
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
     # def get(self, request, *args, **kwargs):
     #     model = self.request.user.profile.budget
@@ -100,7 +109,6 @@ class EditBudgetView(UpdateView):
     #             "model": model
     #         }
     #     )
-
 
     # def get(self, request, *args, **kwargs):
     #     budget = self.request.user.profile.budget
