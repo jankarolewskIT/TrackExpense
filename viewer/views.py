@@ -2,10 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView, CreateView, View
+from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView
 
 from viewer.models.expence import Expence
-from viewer.forms import SignUpForm
+from viewer.models.budget import Budget
+from viewer.forms import SignUpForm, UpdateBudgetForm
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -18,7 +19,8 @@ class ProfileView(LoginRequiredMixin, View):
         return render(
             request, template_name="profile.html",
             context={
-                "expenses": queryset
+                "expenses": queryset,
+                "budget": budget
             }
         )
 
@@ -31,7 +33,7 @@ class SubmitableLoginView(LoginView):
 class SubmitableSignUpView(CreateView):
     form_class = SignUpForm
     template_name = "form.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("login")
 
 
 class WelcomeView(TemplateView):
@@ -81,3 +83,21 @@ class CategoryDetailView(View):
                 "category": category
             }
         )
+
+
+class EditBudgetView(UpdateView):
+    form_class = UpdateBudgetForm
+    template_name = "edit_budget.html"
+    model = Budget
+    success_url = "home"
+
+    # def get(self, request, *args, **kwargs):
+    #     budget = self.request.user.profile.budget
+    #     form = UpdateBudgetForm
+    #     return render(
+    #         request, template_name="edit_budget.html",
+    #         context={
+    #             "budget": budget,
+    #             "form": form
+    #         }
+    #     )

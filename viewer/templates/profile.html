@@ -5,8 +5,7 @@
 {% endblock %}
 
 {% block expence_list %}
-
-
+    <a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a>
 
     {% for obj in expenses %}
     <li>
