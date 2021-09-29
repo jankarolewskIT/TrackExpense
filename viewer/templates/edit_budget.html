@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content %}
+    {{ object }}
+
     <form method="post">
         {% csrf_token %}
         <div class="form-group col-md-4">

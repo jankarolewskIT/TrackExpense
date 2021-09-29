@@ -86,10 +86,21 @@ class CategoryDetailView(View):
 
 
 class EditBudgetView(UpdateView):
-    form_class = UpdateBudgetForm
+    # form_class = UpdateBudgetForm
+    fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
+    success_url = reverse_lazy("home")
     model = Budget
-    success_url = "home"
+
+    # def get(self, request, *args, **kwargs):
+    #     model = self.request.user.profile.budget
+    #     return render(
+    #         request, template_name="edit_budget.html",
+    #         context={
+    #             "model": model
+    #         }
+    #     )
+
 
     # def get(self, request, *args, **kwargs):
     #     budget = self.request.user.profile.budget

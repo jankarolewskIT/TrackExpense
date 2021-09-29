@@ -7,11 +7,8 @@
 
 {% block content %}
     <form method="post">
-    <div class="form-group col-md-4">
-        {{ form.name.errors }}
-        <label for="{{ form.description.id_for_label }}">Opis</label>
-        {{ form.description }} <!-- wygenerowanie pola input -->
-    </div>
+        {% csrf_token %}
+        {{ form.as_p }}
     <input type="submit" value="Zapisz"
            class="btn btn-primary">
     </form>
