@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from viewer.models import Budget, Profile, Expence
-from django.contrib.auth.views import LogoutView
-from viewer.views import LoginView
+from django.contrib.auth.views import LogoutView, LoginView
+from viewer.views import WelcomeView, go_to_profile, SubmitableLoginView
 
 admin.site.register(Budget)
 admin.site.register(Expence)
@@ -26,5 +26,7 @@ admin.site.register(Profile)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('viewer/', include('viewer.urls')),
+    path('front', WelcomeView.as_view(), name="welcome"),
+    path('login', SubmitableLoginView.as_view(), name="login"),
     path('logout', LogoutView.as_view(), name="logout"),
 ]

@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block expence_list %}
-    {% if user.is_authenticated %}
+
+    {% if user == user_obj.user %}
+
 
         {% for obj in object_list %}
         <li>
