@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from viewer.models import Budget, Profile, Expence
 from django.contrib.auth.views import LogoutView
-from viewer.views import WelcomeView, SubmitableLoginView
+from viewer.views import WelcomeView, SubmitableLoginView, SubmitableSignUpView
 
 admin.site.register(Budget)
 admin.site.register(Expence)
@@ -29,4 +29,5 @@ urlpatterns = [
     path('front', WelcomeView.as_view(), name="welcome"),
     path('login', SubmitableLoginView.as_view(), name="login"),
     path('logout', LogoutView.as_view(), name="logout"),
+    path('register', SubmitableSignUpView.as_view(), name="register"),
 ]

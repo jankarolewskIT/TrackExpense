@@ -2,9 +2,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView, View
+from django.views.generic import TemplateView, DetailView, CreateView, View
 
 from viewer.models.expence import Expence
+from viewer.forms import SignUpForm
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -23,6 +24,12 @@ class ProfileView(LoginRequiredMixin, View):
 
 
 class SubmitableLoginView(LoginView):
+    template_name = "form.html"
+    success_url = reverse_lazy("home")
+
+
+class SubmitableSignUpView(CreateView):
+    form_class = SignUpForm
     template_name = "form.html"
     success_url = reverse_lazy("home")
 
