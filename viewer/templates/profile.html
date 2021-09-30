@@ -4,12 +4,59 @@
     {{ user.username }}
 {% endblock %}
 
-{% block expence_list %}
-    <a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a>
 
-    {% for obj in expenses %}
-    <li>
-        <p><a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}</p>
-    </li>
-    {% endfor %}
+{% block content %}
+        <!-- POP UP EXPANSE CREATION FORM -->
+
+        {% block create_expense %}
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Add
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form method="post">
+                      {% csrf_token %}
+                      {{ form.non_field_errors }}
+                        <div>
+                            {{ form.as_p }}
+                        </div>
+                  </form>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endblock %}
+    <!-- EXNASE LIST -->
+    {% block expence_list %}
+
+        <a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a>
+
+        {% for obj in expenses %}
+        <li>
+            <p><a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}</p>
+        </li>
+        {% endfor %}
+    {% endblock %}
 {% endblock %}
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+      myInput.focus()
+    })
+</script>

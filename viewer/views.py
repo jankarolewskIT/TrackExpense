@@ -6,13 +6,23 @@ from django.views.generic import TemplateView, DetailView, CreateView, View, Upd
 
 from viewer.models.expence import Expence
 from viewer.models.budget import Budget
-from viewer.forms import SignUpForm, UpdateBudgetForm
+from viewer.forms import SignUpForm, UpdateBudgetForm, CreateExpenseForm
+
+
+class ExpensePopUpView(CreateView):
+    form_class = CreateExpenseForm
+    template_name = "profile.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, View):
     model = Expence
 
     def get(self, request):
+        categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
         queryset = Expence.objects.filter(budget=budget)
 
@@ -20,7 +30,8 @@ class ProfileView(LoginRequiredMixin, View):
             request, template_name="profile.html",
             context={
                 "expenses": queryset,
-                "budget": budget
+                "budget": budget,
+                "categories": categories
             }
         )
 
@@ -52,37 +63,67 @@ class CategoryDetailView(View):
     success_url = reverse_lazy("category_detail")
 
     def get(self, request, category_short):
-        all_expences = Expence.objects.values_list("value")
-        expences_query = Expence.objects.all()
-        category_expences = Expence.objects.values_list("value").filter(category=category_short)
+        budget = self.request.user.profile.budget
+        all_expenses = Expence.objects.filter(budget=budget)
+        category_expenses = all_expenses.filter(category=category_short)
         category = category_short
-        total_expences = 0
-        total_category_expences = 0
+        total_expenses = 0
+        total_category_expenses = 0
+        total_budget = self.request.user.profile.budget.total_budget
 
-        for expence in category_expences:
-            total_category_expences += expence[0]
+        for expense in all_expenses:
+            total_expenses += expense.value
 
-        for expence in all_expences:
-            total_expences += expence[0]
+        for expense in category_expenses:
+            total_category_expenses += expense.value
 
-        total_budget = 0
-        if len(expences_query) > 0:
-            total_budget = expences_query[3].budget.total_budget
-
-        category_to_all = round(total_category_expences / total_expences, 2)
-        category_to_budget = round(total_category_expences / total_budget, 2)
+        category_to_all = round(total_category_expenses / total_expenses, 2)
+        category_to_budget = round(total_category_expenses / total_budget, 2)
 
         return render(
             request, template_name="category_detail.html",
             context={
-                "category_to_budget": category_to_budget,
-                "total_expences": total_expences,
-                "category_expences": category_expences,
-                "total_category_expences": total_category_expences,
+                "budget": budget,
+                "all_expenses": all_expenses,
+                "category_expenses": category_expenses,
+                "category": category,
                 "category_to_all": category_to_all,
-                "category": category
+                "category_to_budget": category_to_budget
             }
         )
+
+    # def get(self, request, category_short):
+    #     all_expences = Expence.objects.values_list("value")
+    #     expences_query = Expence.objects.all()
+    #     category_expences = Expence.objects.values_list("value").filter(category=category_short)
+    #     category = category_short
+    #     total_expences = 0
+    #     total_category_expences = 0
+    #
+    #     for expence in category_expences:
+    #         total_category_expences += expence[0]
+    #
+    #     for expence in all_expences:
+    #         total_expences += expence[0]
+    #
+    #     total_budget = 0
+    #     if len(expences_query) > 0:
+    #         total_budget = expences_query[3].budget.total_budget
+    #
+    #     category_to_all = round(total_category_expences / total_expences, 2)
+    #     category_to_budget = round(total_category_expences / total_budget, 2)
+    #
+    #     return render(
+    #         request, template_name="category_detail.html",
+    #         context={
+    #             "category_to_budget": category_to_budget,
+    #             "total_expences": total_expences,
+    #             "category_expences": category_expences,
+    #             "total_category_expences": total_category_expences,
+    #             "category_to_all": category_to_all,
+    #             "category": category
+    #         }
+    #     )
 
 
 class EditBudgetView(UpdateView):

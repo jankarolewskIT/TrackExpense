@@ -5,11 +5,50 @@ from django.db.transaction import atomic
 from django.forms import (
     CharField, Form, Textarea,
     DecimalField, NumberInput, TextInput,
-    ModelForm
+    ModelForm, ChoiceField, CheckboxInput
 )
 
 from viewer.models.profile import Profile
 from viewer.models.budget import Budget
+from viewer.models.expence import Expence
+
+
+class CreateExpenseForm(ModelForm):
+    class Meta:
+        model = Expence
+        fields = "__all__"
+
+    name = CharField(
+        label="Expense name: ",
+        max_length=128,
+        widget=TextInput
+    )
+
+    value = DecimalField(
+        label="Amount: ",
+        max_digits=100000000,
+        decimal_places=2,
+        min_value=0.01
+    )
+
+    category = ChoiceField(
+        label="Category: ",
+        widget=CheckboxInput
+    )
+
+    # def save(self, commit=True):
+    #     name = self.cleaned_data["name"]
+    #     value = self.cleaned_data["value"]
+    #     category = self.cleaned_data["category"]
+    #     expense = Expence(
+    #         name=name,
+    #         value=value,
+    #         category=category
+    #
+    #     )
+    #     if commit:
+    #         expense.save()
+    #     return
 
 
 class SignUpForm(UserCreationForm):
@@ -56,8 +95,3 @@ class UpdateBudgetForm(ModelForm):
         decimal_places=2,
         widget=NumberInput,
     )
-
-
-
-
-
