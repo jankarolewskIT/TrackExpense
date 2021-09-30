@@ -1,11 +1,12 @@
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, UserCreationForm
 )
+from django.contrib.auth.models import User
 from django.db.transaction import atomic
 from django.forms import (
     CharField, Form, Textarea,
     DecimalField, NumberInput, TextInput,
-    ModelForm, ChoiceField, Select
+    ModelForm, ChoiceField, Select, ModelChoiceField
 )
 
 from viewer.models.profile import Profile
@@ -32,24 +33,35 @@ class CreateExpenseForm(ModelForm):
     )
 
     category = ChoiceField(
+        choices=Expence.Catagory.choices,
         label="Category: ",
         widget=Select
     )
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(CreateExpenseForm, self).__init__(*args, **kwargs)
+        self.fields['budget'] = ModelChoiceField(
+            queryset=Budget.objects.filter(profile=self.request.user.profile)
+        )
 
+    @atomic
     def save(self, commit=True):
+        result = super().save(commit)
         name = self.cleaned_data["name"]
         value = self.cleaned_data["value"]
         category = self.cleaned_data["category"]
+        budget = self.cleaned_data["budget"]
         expense = Expence(
             name=name,
             value=value,
-            category=category
+            category=category,
+            budget=budget
 
         )
         if commit:
             expense.save()
-        return
+        return result
 
 
 class SignUpForm(UserCreationForm):
@@ -86,7 +98,7 @@ class UpdateBudgetForm(ModelForm):
     name = CharField(
         label="Enter your budget name: ",
         min_length=2,
-        widget=TextInput,
+        widget=TextInput
     )
 
     total_budget = DecimalField(
@@ -94,5 +106,5 @@ class UpdateBudgetForm(ModelForm):
         min_value=0,
         max_digits=10000000,
         decimal_places=2,
-        widget=NumberInput,
+        widget=NumberInput
     )

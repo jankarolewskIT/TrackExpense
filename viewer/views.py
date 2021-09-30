@@ -9,16 +9,18 @@ from viewer.models.budget import Budget
 from viewer.forms import SignUpForm, UpdateBudgetForm, CreateExpenseForm
 
 
-class ExpensePopUpView(CreateView):
+class ExpenseCreateView(CreateView):
     model = Expence
+    template_name = "add_expense.html"
     form_class = CreateExpenseForm
-    template_name = "profile.html"
     success_url = reverse_lazy("home")
 
-    # def get_form_kwargs(self):
-    #     kwargs = super(ExpensePopUpView, self).get_form_kwargs()
-    #     kwargs["request"] = self.request
-    #     return kwargs
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseCreateView, self).get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
+
+
 
 
 class ProfileView(LoginRequiredMixin, View):

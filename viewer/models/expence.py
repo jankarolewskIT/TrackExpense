@@ -24,7 +24,7 @@ class Expence(Model):
     category = CharField(
         max_length=2,
         choices=Catagory.choices,
-        default=Catagory.OTHER,
+        default=Catagory.OTHER
     )
 
     def __str__(self):
