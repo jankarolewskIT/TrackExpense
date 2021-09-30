@@ -9,13 +9,13 @@ from viewer.models.budget import Budget
 from viewer.forms import SignUpForm, UpdateBudgetForm, CreateExpenseForm
 
 
-class ExpensePopUpView(CreateView):
-    form_class = CreateExpenseForm
-    template_name = "profile.html"
-    success_url = reverse_lazy("home")
-
-    def form_valid(self, form):
-        return super().form_valid(form)
+# class ExpensePopUpView(CreateView):
+#     form_class = CreateExpenseForm
+#     template_name = "profile.html"
+#     success_url = reverse_lazy("home")
+#
+#     def form_valid(self, form):
+#         return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -88,7 +88,8 @@ class CategoryDetailView(View):
                 "category_expenses": category_expenses,
                 "category": category,
                 "category_to_all": category_to_all,
-                "category_to_budget": category_to_budget
+                "category_to_budget": category_to_budget,
+                "total_category_expenses": total_category_expenses
             }
         )
 
