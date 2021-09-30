@@ -7,8 +7,10 @@
 
 {% block content %}
     <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+     {% csrf_token %}
+
+
+
     <input type="submit" value="Zapisz"
            class="btn btn-primary">
     </form>

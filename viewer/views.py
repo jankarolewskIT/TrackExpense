@@ -6,31 +6,35 @@ from django.views.generic import TemplateView, DetailView, CreateView, View, Upd
 
 from viewer.models.expence import Expence
 from viewer.models.budget import Budget
-from viewer.forms import SignUpForm, CreateExpenseForm
+from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm
 
 
 class ExpenseCreateView(CreateView):
     model = Expence
-    template_name = "add_edit_expense.html"
-    form_class = CreateExpenseForm
+    # form_class = CreateExpenseForm
+    # template_name = "add_edit_expense.html"
     success_url = reverse_lazy("home")
 
-    def get_form_kwargs(self):
-        kwargs = super(ExpenseCreateView, self).get_form_kwargs()
-        kwargs["request"] = self.request
-        return kwargs
+    # def get_form_kwargs(self):
+    #     kwargs = super(ExpenseCreateView, self).get_form_kwargs()
+    #     kwargs["request"] = self.request
+    #     return kwargs
+
+    def get(self, request, *args, **kwargs):
+        form_class = CreateExpenseForm(initial={"budget": self.request.user.profile.budget})
+        return render(
+            request, template_name= "add_edit_expense.html",
+            context={
+                "form": form_class
+            }
+        )
 
 
 class ExpenseEditView(UpdateView):
     model = Expence
     template_name = "add_edit_expense.html"
-    form_class = CreateExpenseForm
+    form_class = UpdateExpenseForm
     success_url = reverse_lazy("home")
-
-    def get_form_kwargs(self):
-        kwargs = super(ExpenseEditView, self).get_form_kwargs()
-        kwargs["request"] = self.request
-        return kwargs
 
 
 class ExpenseDeleteView(DeleteView):
