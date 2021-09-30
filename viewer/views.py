@@ -2,16 +2,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView
+from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
 
 from viewer.models.expence import Expence
 from viewer.models.budget import Budget
-from viewer.forms import SignUpForm, UpdateBudgetForm, CreateExpenseForm
+from viewer.forms import SignUpForm, CreateExpenseForm
 
 
 class ExpenseCreateView(CreateView):
     model = Expence
-    template_name = "add_expense.html"
+    template_name = "add_edit_expense.html"
     form_class = CreateExpenseForm
     success_url = reverse_lazy("home")
 
@@ -21,6 +21,22 @@ class ExpenseCreateView(CreateView):
         return kwargs
 
 
+class ExpenseEditView(UpdateView):
+    model = Expence
+    template_name = "add_edit_expense.html"
+    form_class = CreateExpenseForm
+    success_url = reverse_lazy("home")
+
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseEditView, self).get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
+
+
+class ExpenseDeleteView(DeleteView):
+    model = Expence
+    success_url = reverse_lazy("home")
+    template_name = "delete_expense.html"
 
 
 class ProfileView(LoginRequiredMixin, View):
