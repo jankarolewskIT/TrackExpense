@@ -9,13 +9,16 @@ from viewer.models.budget import Budget
 from viewer.forms import SignUpForm, UpdateBudgetForm, CreateExpenseForm
 
 
-# class ExpensePopUpView(CreateView):
-#     form_class = CreateExpenseForm
-#     template_name = "profile.html"
-#     success_url = reverse_lazy("home")
-#
-#     def form_valid(self, form):
-#         return super().form_valid(form)
+class ExpensePopUpView(CreateView):
+    model = Expence
+    form_class = CreateExpenseForm
+    template_name = "profile.html"
+    success_url = reverse_lazy("home")
+
+    # def get_form_kwargs(self):
+    #     kwargs = super(ExpensePopUpView, self).get_form_kwargs()
+    #     kwargs["request"] = self.request
+    #     return kwargs
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -25,13 +28,15 @@ class ProfileView(LoginRequiredMixin, View):
         categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
         queryset = Expence.objects.filter(budget=budget)
+        form = CreateExpenseForm
 
         return render(
             request, template_name="profile.html",
             context={
                 "expenses": queryset,
                 "budget": budget,
-                "categories": categories
+                "categories": categories,
+                "form": form
             }
         )
 

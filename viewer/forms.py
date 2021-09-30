@@ -5,7 +5,7 @@ from django.db.transaction import atomic
 from django.forms import (
     CharField, Form, Textarea,
     DecimalField, NumberInput, TextInput,
-    ModelForm, ChoiceField, CheckboxInput
+    ModelForm, ChoiceField, Select
 )
 
 from viewer.models.profile import Profile
@@ -16,7 +16,7 @@ from viewer.models.expence import Expence
 class CreateExpenseForm(ModelForm):
     class Meta:
         model = Expence
-        fields = "__all__"
+        fields = ["name", "value", "category"]
 
     name = CharField(
         label="Expense name: ",
@@ -33,22 +33,23 @@ class CreateExpenseForm(ModelForm):
 
     category = ChoiceField(
         label="Category: ",
-        widget=CheckboxInput
+        widget=Select
     )
 
-    # def save(self, commit=True):
-    #     name = self.cleaned_data["name"]
-    #     value = self.cleaned_data["value"]
-    #     category = self.cleaned_data["category"]
-    #     expense = Expence(
-    #         name=name,
-    #         value=value,
-    #         category=category
-    #
-    #     )
-    #     if commit:
-    #         expense.save()
-    #     return
+
+    def save(self, commit=True):
+        name = self.cleaned_data["name"]
+        value = self.cleaned_data["value"]
+        category = self.cleaned_data["category"]
+        expense = Expence(
+            name=name,
+            value=value,
+            category=category
+
+        )
+        if commit:
+            expense.save()
+        return
 
 
 class SignUpForm(UserCreationForm):
