@@ -11,23 +11,23 @@ from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm
 
 class ExpenseCreateView(CreateView):
     model = Expence
-    # form_class = CreateExpenseForm
-    # template_name = "add_edit_expense.html"
+    form_class = CreateExpenseForm
+    template_name = "add_edit_expense.html"
     success_url = reverse_lazy("home")
 
-    # def get_form_kwargs(self):
-    #     kwargs = super(ExpenseCreateView, self).get_form_kwargs()
-    #     kwargs["request"] = self.request
-    #     return kwargs
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseCreateView, self).get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
 
-    def get(self, request, *args, **kwargs):
-        form_class = CreateExpenseForm(initial={"budget": self.request.user.profile.budget})
-        return render(
-            request, template_name= "add_edit_expense.html",
-            context={
-                "form": form_class
-            }
-        )
+    # def get(self, request, *args, **kwargs):
+    #     form_class = CreateExpenseForm(initial={"budget": self.request.user.profile.budget})
+    #     return render(
+    #         request, template_name= "add_edit_expense.html",
+    #         context={
+    #             "form": form_class
+    #         }
+    #     )
 
 
 class ExpenseEditView(UpdateView):

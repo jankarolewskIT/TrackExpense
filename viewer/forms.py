@@ -41,17 +41,14 @@ class UpdateExpenseForm(ModelForm):
 
 
 class CreateExpenseForm(ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     self.request = kwargs.pop('request')
-    #     super(CreateExpenseForm, self).__init__(*args, **kwargs)
-    #     # self.fields["budget"] = ModelChoiceField(
-    #     #     queryset=Budget.objects.filter(profile=self.request.user.profile)
-    #     # )
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(CreateExpenseForm, self).__init__(*args, **kwargs)
+        self.budget = Budget.objects.filter(profile=self.request.user.profile)
 
     class Meta:
         model = Expence
         fields = ["name", "value", "category"]
-
 
         # widgets = {'budget': HiddenInput()}
 
@@ -80,12 +77,12 @@ class CreateExpenseForm(ModelForm):
         name = self.cleaned_data["name"]
         value = self.cleaned_data["value"]
         category = self.cleaned_data["category"]
-        # budget = self.cleaned_data["budget"]
+        budget = self.budget[0]
         expense = Expence(
             name=name,
             value=value,
             category=category,
-            budget=self.initial("budget")
+            budget=budget
 
         )
         if commit:
