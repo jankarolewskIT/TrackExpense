@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
@@ -19,15 +19,6 @@ class ExpenseCreateView(CreateView):
         kwargs = super(ExpenseCreateView, self).get_form_kwargs()
         kwargs["request"] = self.request
         return kwargs
-
-    # def get(self, request, *args, **kwargs):
-    #     form_class = CreateExpenseForm(initial={"budget": self.request.user.profile.budget})
-    #     return render(
-    #         request, template_name= "add_edit_expense.html",
-    #         context={
-    #             "form": form_class
-    #         }
-    #     )
 
 
 class ExpenseEditView(UpdateView):
@@ -72,6 +63,11 @@ class SubmitableSignUpView(CreateView):
     form_class = SignUpForm
     template_name = "form.html"
     success_url = reverse_lazy("login")
+
+
+class SubmittablePasswordChangeView(PasswordChangeView):
+    template_name = "form.html"
+    success_url = reverse_lazy("home")
 
 
 class WelcomeView(TemplateView):
@@ -120,42 +116,8 @@ class CategoryDetailView(View):
             }
         )
 
-    # def get(self, request, category_short):
-    #     all_expences = Expence.objects.values_list("value")
-    #     expences_query = Expence.objects.all()
-    #     category_expences = Expence.objects.values_list("value").filter(category=category_short)
-    #     category = category_short
-    #     total_expences = 0
-    #     total_category_expences = 0
-    #
-    #     for expence in category_expences:
-    #         total_category_expences += expence[0]
-    #
-    #     for expence in all_expences:
-    #         total_expences += expence[0]
-    #
-    #     total_budget = 0
-    #     if len(expences_query) > 0:
-    #         total_budget = expences_query[3].budget.total_budget
-    #
-    #     category_to_all = round(total_category_expences / total_expences, 2)
-    #     category_to_budget = round(total_category_expences / total_budget, 2)
-    #
-    #     return render(
-    #         request, template_name="category_detail.html",
-    #         context={
-    #             "category_to_budget": category_to_budget,
-    #             "total_expences": total_expences,
-    #             "category_expences": category_expences,
-    #             "total_category_expences": total_category_expences,
-    #             "category_to_all": category_to_all,
-    #             "category": category
-    #         }
-    #     )
-
 
 class EditBudgetView(UpdateView):
-    # form_class = UpdateBudgetForm
     fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
     success_url = reverse_lazy("home")
@@ -169,23 +131,3 @@ class EditBudgetView(UpdateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
-
-    # def get(self, request, *args, **kwargs):
-    #     model = self.request.user.profile.budget
-    #     return render(
-    #         request, template_name="edit_budget.html",
-    #         context={
-    #             "model": model
-    #         }
-    #     )
-
-    # def get(self, request, *args, **kwargs):
-    #     budget = self.request.user.profile.budget
-    #     form = UpdateBudgetForm
-    #     return render(
-    #         request, template_name="edit_budget.html",
-    #         context={
-    #             "budget": budget,
-    #             "form": form
-    #         }
-    #     )

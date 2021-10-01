@@ -1,13 +1,12 @@
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, UserCreationForm
 )
-from django.contrib.auth.models import User
 from django.db.transaction import atomic
 from django.forms import (
-    CharField, Form, Textarea,
-    DecimalField, NumberInput, TextInput,
-    ModelForm, ChoiceField, Select, ModelChoiceField,
-    HiddenInput
+    CharField, DecimalField, NumberInput,
+    TextInput, ModelForm, ChoiceField,
+    Select,
+
 )
 
 from viewer.models.profile import Profile
@@ -49,8 +48,6 @@ class CreateExpenseForm(ModelForm):
     class Meta:
         model = Expence
         fields = ["name", "value", "category"]
-
-        # widgets = {'budget': HiddenInput()}
 
     name = CharField(
         label="Expense name: ",

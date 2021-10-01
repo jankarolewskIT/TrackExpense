@@ -8,7 +8,7 @@
 {% block content %}
     <p><a href="{% url "add_expense" %}">Add</a></p>
     <!-- EXPENSE LIST -->
-
+    <p><a href="{% url "change_password" %}">Change password</a></p>
     {% block expence_list %}
 
         <a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a>
