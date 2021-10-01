@@ -72,7 +72,6 @@ class SubmittablePasswordChangeView(PasswordChangeView):
 
 class WelcomeView(TemplateView):
     template_name = "home.html"
-    success_url = reverse_lazy("welcome")
 
 
 class ExpenceDetailView(DetailView):

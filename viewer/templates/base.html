@@ -7,21 +7,79 @@
 
 </head>
 <body>
+    <nav class="navbar navbar-light bg-light fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">TrackExpense</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        {% if user.is_authenticated %}
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">{{ user }}</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 
-{% if user.is_authenticated %}
-    <p><a href="{% url "logout" %}">LogOut</a></p>
-{% else %}
-    <p><a href="{% url "login" %}">LogIn</a></p>
-    <p><a href="{% url "register" %}">SignUp</a></p>
-{% endif %}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">{{ user.profile.budget }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Edit budget</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ user.profile.budget }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+                  <li><a class="dropdown-item" href="{% url "edit_budget" budget.id %}">Edit budget</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url "logout" %}">Log Out</a></li>
+                </ul>
+              </li>
+            </ul>
+        {% else %}
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url "login" %}" role="button">Log In</a>
+                        <a class="btn btn-primary" href="{% url "register" %}" role="button">Sign In</a>
+                    </li>
+                </ul>
+            </div>
 
-{% block content %}
+        {% endif %}
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    {% block expence_list %}
+<section class="container justify-content">
+    <div class="content">
+        {% if user.is_authenticated %}
+            <p><a href="{% url "logout" %}">LogOut</a></p>
+        {% else %}
+            <p><a href="{% url "login" %}">LogIn</a></p>
+            <p><a href="{% url "register" %}">SignUp</a></p>
+        {% endif %}
 
-    {% endblock %}
+        {% block content %}
 
-{% endblock %}
+            {% block expence_list %}
+
+            {% endblock %}
+
+        {% endblock %}
+    </div>
+</section>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
 </body>
