@@ -11,16 +11,16 @@
     <p><a href="{% url "change_password" %}">Change password</a></p>
     {% block expence_list %}
 
-        <a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a>
+        <p><a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a></p>
 
         {% for obj in expenses %}
-        <li>
-            <div>
-                <p><a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}</p>
+        <table class="table table-striped">
+            <tr class="table-primary">
+                <a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}
                 <a href="{% url "delete_expense" obj.id %}">(Delete)</a>
                 <a href="{% url "edit_expense" obj.id %}">(Edit)</a>
-            </div>
-        </li>
+            </tr>
+        </table>
         {% endfor %}
     {% endblock %}
 {% endblock %}
