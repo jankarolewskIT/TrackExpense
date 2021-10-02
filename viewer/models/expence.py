@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, DateField,
-    OneToOneField, CASCADE, ForeignKey, TextChoices, DO_NOTHING,
+    CASCADE, ForeignKey, TextChoices,
     BooleanField, IntegerField
 )
 

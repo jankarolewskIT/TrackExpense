@@ -31,6 +31,9 @@ class ExpenseCreateView(CreateView):
         )
 
 
+
+
+
 class ExpenseEditView(UpdateView):
     model = Expence
     template_name = "add_edit_expense.html"
