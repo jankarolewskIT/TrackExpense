@@ -1,6 +1,8 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, DateField,
-    OneToOneField, CASCADE, ForeignKey, TextChoices, DO_NOTHING
+    OneToOneField, CASCADE, ForeignKey, TextChoices, DO_NOTHING,
+    BooleanField, IntegerField
 )
 
 from viewer.models.budget import Budget
@@ -10,7 +12,9 @@ class Expence(Model):
     name = CharField(max_length=128)
     value = DecimalField(max_digits=10000, decimal_places=2)
     date = DateField(auto_now_add=True)
-    budget = ForeignKey(Budget, on_delete=DO_NOTHING, null=True)
+    budget = ForeignKey(Budget, on_delete=CASCADE, null=True)
+    is_cycle = BooleanField(default=False)
+    expense_monthly_date = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(31)], null=True)
 
     class Catagory(TextChoices):
         TRANSPORT = "TR", "Transport"

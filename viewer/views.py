@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
@@ -6,7 +7,8 @@ from django.views.generic import TemplateView, DetailView, CreateView, View, Upd
 
 from viewer.models.expence import Expence
 from viewer.models.budget import Budget
-from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm
+from viewer.models.profile import Profile
+from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm
 
 
 class ExpenseCreateView(CreateView):
@@ -116,8 +118,26 @@ class CategoryDetailView(View):
         )
 
 
+class DeleteProfileView(DeleteView):
+    model = User
+    template_name = "delete_profile.html"
+    success_url = reverse_lazy("welcome")
+
+
+class EditProfileView(UpdateView):
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = "form.html"
+    success_url = reverse_lazy("home")
+
+    def get_object(self, queryset=None):
+        profile_id = self.request.user.profile.id
+        return get_object_or_404(Profile, id=profile_id)
+
+
 class EditBudgetView(UpdateView):
-    fields = ["name", "total_budget"]
+    form_class = UpdateBudgetForm
+    # fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
     success_url = reverse_lazy("home")
 

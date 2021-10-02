@@ -5,7 +5,8 @@ from django.db.transaction import atomic
 from django.forms import (
     CharField, DecimalField, NumberInput,
     TextInput, ModelForm, ChoiceField,
-    Select,
+    Select, DateField, IntegerField, BooleanField,
+    CheckboxInput, SelectDateWidget, RadioSelect
 
 )
 
@@ -17,7 +18,7 @@ from viewer.models.expence import Expence
 class UpdateExpenseForm(ModelForm):
     class Meta:
         model = Expence
-        fields = ["name", "value", "category"]
+        fields = ["name", "value", "category", "is_cycle", "expense_monthly_date"]
 
         name = CharField(
             label="Expense name: ",
@@ -37,6 +38,19 @@ class UpdateExpenseForm(ModelForm):
             label="Category: ",
             widget=Select
         )
+        is_cycle = BooleanField(
+            label="Is cycle?",
+            initial=False,
+            widget=CheckboxInput
+        )
+
+        expense_monthly_date = IntegerField(
+            label="Day od cycle",
+            min_value=1,
+            max_value=31,
+            widget=NumberInput
+
+        )
 
 
 class CreateExpenseForm(ModelForm):
@@ -47,7 +61,7 @@ class CreateExpenseForm(ModelForm):
 
     class Meta:
         model = Expence
-        fields = ["name", "value", "category"]
+        fields = ["name", "value", "category", "is_cycle", "expense_monthly_date"]
 
     name = CharField(
         label="Expense name: ",
@@ -68,28 +82,54 @@ class CreateExpenseForm(ModelForm):
         widget=Select
     )
 
-    @atomic
+    is_cycle = BooleanField(
+        label="Is cycle?",
+        initial=False,
+        widget=CheckboxInput
+    )
+
+    expense_monthly_date = IntegerField(
+        label="Day od cycle",
+        min_value=1,
+        max_value=31,
+        widget=NumberInput
+
+    )
+
     def save(self, commit=True):
-        result = super().save(commit)
         name = self.cleaned_data["name"]
         value = self.cleaned_data["value"]
         category = self.cleaned_data["category"]
+        is_cycle = self.cleaned_data["is_cycle"]
+        expense_monthly_date = self.cleaned_data["expense_monthly_date"]
+
         budget = self.budget[0]
+
         expense = Expence(
             name=name,
             value=value,
             category=category,
-            budget=budget
+            budget=budget,
+            is_cycle=is_cycle,
+            expense_monthly_date=expense_monthly_date
 
         )
         if commit:
             expense.save()
-        return result
+        return expense
 
 
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         fields = ["username"]
+
+    current_money = DecimalField(
+        label="Your current budget: ",
+        widget=NumberInput,
+        max_digits=100000000,
+        min_value=0,
+        decimal_places=2
+    )
 
     income = DecimalField(
         label="Your income: ",
@@ -99,24 +139,51 @@ class SignUpForm(UserCreationForm):
         decimal_places=2
     )
 
+    pay_day = IntegerField(
+        label="Your salary day",
+        min_value=1,
+        max_value=31,
+
+    )
+
+    # income_date = DateField(
+    #     label=""
+    # )
+
     @atomic
     def save(self, commit=True):
         self.instance.is_active = True
         result = super().save(commit)
 
+        current_money = self.cleaned_data["current_money"]
         income = self.cleaned_data["income"]
-        profile = Profile(income=income, user=result)
-        budget = Budget(profile=profile, total_budget=income)
+        pay_day = self.cleaned_data["pay_day"]
+        profile = Profile(income=income, user=result, pay_day=pay_day)
+        budget = Budget(profile=profile, total_budget=current_money)
         if commit:
             profile.save()
             budget.save()
         return result
 
 
+class UpdateProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["income"]
+
+    income = DecimalField(
+        label="Enter Your income",
+        decimal_places=2,
+        max_digits=100000000,
+        widget=NumberInput
+
+    )
+
+
 class UpdateBudgetForm(ModelForm):
     class Meta:
         model = Budget
-        fields = "__all__"
+        fields = ["name", "total_budget"]
 
     name = CharField(
         label="Enter your budget name: ",

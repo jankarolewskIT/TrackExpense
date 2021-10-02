@@ -26,7 +26,7 @@ admin.site.register(Profile)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('viewer/', include('viewer.urls')),
-    path('front', WelcomeView.as_view(), name="welcome"),
+    path('', WelcomeView.as_view(), name="welcome"),
     path('login', SubmitableLoginView.as_view(), name="login"),
     path('logout', LogoutView.as_view(), name="logout"),
     path('register', SubmitableSignUpView.as_view(), name="register"),

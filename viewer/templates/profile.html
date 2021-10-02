@@ -6,6 +6,8 @@
 
 
 {% block content %}
+    <p><a href="{% url "edit_profile" user.profile.id %}">Edit Profile</a></p>
+    <p><a href="{% url "delete_profile" user.profile.id %}">Delete Profile</a></p>
     <p><a href="{% url "add_expense" %}">Add</a></p>
     <!-- EXPENSE LIST -->
     <p><a href="{% url "change_password" %}">Change password</a></p>

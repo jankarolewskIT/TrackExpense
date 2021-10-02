@@ -14,21 +14,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from django.contrib.auth.views import PasswordResetView, PasswordChangeView
+from django.contrib.auth.views import (
+    PasswordResetView, PasswordChangeDoneView, PasswordResetDoneView,
+    PasswordResetConfirmView, PasswordResetCompleteView
+)
 
 from viewer.views import (
     ProfileView, ExpenceDetailView, CategoryDetailView,
     EditBudgetView, ExpenseCreateView, ExpenseDeleteView,
-    ExpenseEditView, SubmittablePasswordChangeView
+    ExpenseEditView, SubmittablePasswordChangeView, EditProfileView, DeleteProfileView
 )
 
 urlpatterns = [
     path('', ProfileView.as_view(), name="home"),
+    path('profile/edit/<pk>', EditProfileView.as_view(), name="edit_profile"),
+    path('profile/delete/<pk>', DeleteProfileView.as_view(), name="delete_profile"),
     path('change/passowrd', SubmittablePasswordChangeView.as_view(), name="change_password"),
+    path('password_change/done/', PasswordChangeDoneView.as_view(), name='password_change_done'),
+    path('password_reset/', PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('expence/detail/<pk>/', ExpenceDetailView.as_view(), name="expence_detail"),
     path('budget/edit/<pk>', EditBudgetView.as_view(), name="edit_budget"),
     path('category/detail/<category_short>/', CategoryDetailView.as_view(), name="category_detail"),
     path('expense/add', ExpenseCreateView.as_view(), name="add_expense"),
     path('expense/edit/<pk>', ExpenseEditView.as_view(), name="edit_expense"),
     path('expense/delete/<pk>', ExpenseDeleteView.as_view(), name="delete_expense"),
+
 ]
