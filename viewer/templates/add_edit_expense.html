@@ -9,6 +9,7 @@
 
     <form method="post">
         {% csrf_token %}
+        {{ form.none_filed_errors }}
         {{ form.as_p }}
     <button type="submit" value="Save">Save</button>
     </form>

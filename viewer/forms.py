@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, UserCreationForm
 )
+from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
 from django.forms import (
     CharField, DecimalField, NumberInput,
@@ -28,6 +29,7 @@ class UpdateExpenseForm(ModelForm):
 
         value = DecimalField(
             label="Amount: ",
+            validators=[],
             max_digits=100000000,
             decimal_places=2,
             min_value=0.01
@@ -58,10 +60,14 @@ class CreateExpenseForm(ModelForm):
         self.request = kwargs.pop('request')
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
         self.budget = Budget.objects.filter(profile=self.request.user.profile)
+        # self.fields["value"].validators.append(BudgetGraterExpense(self.request))
 
     class Meta:
         model = Expence
-        fields = ["name", "value", "category", "is_cycle", "expense_monthly_date"]
+        fields = [
+            "name", "value", "category",
+            "is_cycle", "expense_monthly_date"
+        ]
 
     name = CharField(
         label="Expense name: ",
@@ -72,6 +78,7 @@ class CreateExpenseForm(ModelForm):
     value = DecimalField(
         label="Amount: ",
         max_digits=100000000,
+        widget=NumberInput,
         decimal_places=2,
         min_value=0.01
     )
@@ -85,16 +92,24 @@ class CreateExpenseForm(ModelForm):
     is_cycle = BooleanField(
         label="Is cycle?",
         initial=False,
-        widget=CheckboxInput
+        widget=CheckboxInput,
+        required=False
     )
 
     expense_monthly_date = IntegerField(
         label="Day od cycle",
         min_value=1,
         max_value=31,
-        widget=NumberInput
+        widget=NumberInput,
+        required=False
 
     )
+
+    def clean_value(self):
+        data = self.cleaned_data["value"]
+        if data > self.request.user.profile.budget.total_budget:
+            raise ValidationError("Budget not enough")
+        return data
 
     def save(self, commit=True):
         name = self.cleaned_data["name"]

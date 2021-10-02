@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
 
 from viewer.models.expence import Expence
@@ -21,6 +21,14 @@ class ExpenseCreateView(CreateView):
         kwargs = super(ExpenseCreateView, self).get_form_kwargs()
         kwargs["request"] = self.request
         return kwargs
+
+    def form_invalid(self, form):
+        return render(
+            self.request, template_name="add_edit_expense.html",
+            context={
+                "form": form
+            }
+        )
 
 
 class ExpenseEditView(UpdateView):
