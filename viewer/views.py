@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
 
-from viewer.models.expence import Expence
-from viewer.models.budget import Budget
+# from viewer.models.expence import Expence
+from viewer.models.budget import Budget, Expence
 from viewer.models.profile import Profile
 from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm
 

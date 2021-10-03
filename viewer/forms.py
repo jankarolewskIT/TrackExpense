@@ -12,8 +12,8 @@ from django.forms import (
 )
 
 from viewer.models.profile import Profile
-from viewer.models.budget import Budget
-from viewer.models.expence import Expence
+from viewer.models.budget import Budget, Expence
+# from viewer.models.expence import Expence
 
 
 class UpdateExpenseForm(ModelForm):
