@@ -22,6 +22,11 @@ class ExpenseCreateView(CreateView):
         kwargs["request"] = self.request
         return kwargs
 
+    # def form_valid(self, form):
+    #     self.request.user.profile.budget.budget_left()
+    #     self.request.user.profile.budget.save()
+    #     return super().form_valid(form)
+
     def form_invalid(self, form):
         return render(
             self.request, template_name="add_edit_expense.html",
@@ -29,9 +34,6 @@ class ExpenseCreateView(CreateView):
                 "form": form
             }
         )
-
-
-
 
 
 class ExpenseEditView(UpdateView):
@@ -45,6 +47,16 @@ class ExpenseDeleteView(DeleteView):
     model = Expence
     success_url = reverse_lazy("home")
     template_name = "delete_expense.html"
+
+    def get_object(self, queryset=None):
+        return Expence.objects.get(id=self.kwargs["pk"])
+
+    def post(self, request, *args, **kwargs):
+        self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
+        self.request.user.profile.budget.save()
+        return super().post(request)
+
+
 
 
 class ProfileView(LoginRequiredMixin, View):
