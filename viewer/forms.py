@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, UserCreationForm
 )
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.db.transaction import atomic
 from django.forms import (
@@ -165,10 +166,6 @@ class SignUpForm(UserCreationForm):
 
     )
 
-    # income_date = DateField(
-    #     label=""
-    # )
-
     @atomic
     def save(self, commit=True):
         self.instance.is_active = True
@@ -179,7 +176,18 @@ class SignUpForm(UserCreationForm):
         pay_day = self.cleaned_data["pay_day"]
         profile = Profile(income=income, user=result, pay_day=pay_day)
         budget = Budget(profile=profile, total_budget=current_money)
+        initial_permissions = [
+            Permission.objects.get(codename="add_expence"),
+            Permission.objects.get(codename="change_expence"),
+            Permission.objects.get(codename="delete_expence"),
+            Permission.objects.get(codename="view_expence"),
+            Permission.objects.get(codename="change_budget"),
+            Permission.objects.get(codename="change_profile"),
+            Permission.objects.get(codename="delete_profile"),
+        ]
         if commit:
+            for permission in initial_permissions:
+                result.user_permissions.add(permission)
             profile.save()
             budget.save()
         return result
@@ -217,3 +225,18 @@ class UpdateBudgetForm(ModelForm):
         decimal_places=2,
         widget=NumberInput
     )
+
+
+# class UpdateTotalBudgetForm(ModelForm):
+#     class Meta:
+#         model = Budget
+#
+#     income = DecimalField(
+#         label="Add",
+#         widget=NumberInput,
+#         decimal_places=2,
+#         max_digits=10000000
+#     )
+#
+#     def save(self, commit=True):
+#         income = self.cleaned_data["income"]

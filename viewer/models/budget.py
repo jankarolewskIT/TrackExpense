@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, OneToOneField, CASCADE, DateField, ForeignKey, BooleanField,
@@ -14,15 +15,8 @@ class Budget(Model):
     name = CharField(max_length=128, blank=True, null=True)
     total_budget = DecimalField(max_digits=100000, decimal_places=2, default=0)
 
-    def add_to_balance(self, income):
+    def add_to_budget(self, income):
         self.total_budget += income
-
-    # def budget_left(self):
-    #     expenses = Expence.objects.filter(budget=self)
-    #     total_expense = 0
-    #     for expense in expenses:
-    #         total_expense += expense.value
-    #     return self.total_budget - total_expense
 
     def __str__(self):
         return f"{self.name} {self.total_budget}"
@@ -34,7 +28,7 @@ class Expence(Model):
     date = DateField(auto_now_add=True)
     budget = ForeignKey(Budget, on_delete=CASCADE, null=True)
     is_cycle = BooleanField(default=False)
-    expense_monthly_date = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(31)], null=True)
+    expense_monthly_date = IntegerField(validators=[MinValueValidator(1), MaxValueValidator(31)], null=True, blank=True)
 
     class Catagory(TextChoices):
         TRANSPORT = "TR", "Transport"

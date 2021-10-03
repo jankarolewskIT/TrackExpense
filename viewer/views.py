@@ -1,21 +1,21 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-# from viewer.models.expence import Expence
 from viewer.models.budget import Budget, Expence
 from viewer.models.profile import Profile
 from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm
 
 
-class ExpenseCreateView(CreateView):
+class ExpenseCreateView(PermissionRequiredMixin, CreateView):
     model = Expence
     form_class = CreateExpenseForm
     template_name = "add_edit_expense.html"
     success_url = reverse_lazy("home")
+    permission_required = "viewer.add_expence"
 
     def get_form_kwargs(self):
         kwargs = super(ExpenseCreateView, self).get_form_kwargs()
@@ -36,17 +36,19 @@ class ExpenseCreateView(CreateView):
         )
 
 
-class ExpenseEditView(UpdateView):
+class ExpenseEditView(PermissionRequiredMixin, UpdateView):
     model = Expence
     template_name = "add_edit_expense.html"
     form_class = UpdateExpenseForm
     success_url = reverse_lazy("home")
+    permission_required = "viewer.change_expence"
 
 
-class ExpenseDeleteView(DeleteView):
+class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
     model = Expence
     success_url = reverse_lazy("home")
     template_name = "delete_expense.html"
+    permission_required = "viewer.view_expence"
 
     def get_object(self, queryset=None):
         return Expence.objects.get(id=self.kwargs["pk"])
@@ -57,6 +59,30 @@ class ExpenseDeleteView(DeleteView):
         return super().post(request)
 
 
+class ExpenseStatView(View):
+    def get(self, request):
+        expences = Expence.objects.filter(budget=self.request.user.profile.budget)
+        transport_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="TR")
+        entertainment_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="ET")
+        health_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="PH")
+        clothes_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="CT")
+        food_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="FD")
+        accommodation_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="AD")
+        other_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="OT")
+        sum_transport = 0
+        sum_all_expences = 0
+        for expense in expences:
+            sum_all_expences += expense.value
+        for expense in transport_query:
+            sum_transport += expense.value
+        saves = self.request.user.profile.budget.total_budget - sum_all_expences
+        return render(
+            request, template_name="profile_stat.html",
+            context={
+                "sum_transport": sum_transport,
+                "saves": saves
+            }
+        )
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -90,24 +116,27 @@ class SubmitableSignUpView(CreateView):
     success_url = reverse_lazy("login")
 
 
-class SubmittablePasswordChangeView(PasswordChangeView):
+class SubmittablePasswordChangeView(LoginRequiredMixin, PermissionRequiredMixin, PasswordChangeView):
     template_name = "form.html"
     success_url = reverse_lazy("home")
+    permission_required = "viewer.change_profile"
 
 
 class WelcomeView(TemplateView):
     template_name = "home.html"
 
 
-class ExpenceDetailView(DetailView):
+class ExpenceDetailView(PermissionRequiredMixin, DetailView):
     model = Expence
     template_name = "expence_detail.html"
     success_url = reverse_lazy("expence_detail")
+    permission_required = "viewer.view_expence"
 
 
-class CategoryDetailView(View):
+class CategoryDetailView(PermissionRequiredMixin, View):
     model = Expence
     success_url = reverse_lazy("category_detail")
+    permission_required = "viewer.view_expence"
 
     def get(self, request, category_short):
         budget = self.request.user.profile.budget
@@ -141,28 +170,31 @@ class CategoryDetailView(View):
         )
 
 
-class DeleteProfileView(DeleteView):
+class DeleteProfileView(PermissionRequiredMixin, DeleteView):
     model = User
     template_name = "delete_profile.html"
     success_url = reverse_lazy("welcome")
+    permission_required = "viewer.delete_profile"
 
 
-class EditProfileView(UpdateView):
+class EditProfileView(PermissionRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = "form.html"
     success_url = reverse_lazy("home")
+    permission_required = "viewer.change_profile"
 
     def get_object(self, queryset=None):
         profile_id = self.request.user.profile.id
         return get_object_or_404(Profile, id=profile_id)
 
 
-class EditBudgetView(UpdateView):
+class EditBudgetView(PermissionRequiredMixin, UpdateView):
     form_class = UpdateBudgetForm
     # fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
     success_url = reverse_lazy("home")
+    permission_required = "viewer.change_budget"
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)

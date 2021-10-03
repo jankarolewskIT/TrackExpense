@@ -22,7 +22,8 @@ from django.contrib.auth.views import (
 from viewer.views import (
     ProfileView, ExpenceDetailView, CategoryDetailView,
     EditBudgetView, ExpenseCreateView, ExpenseDeleteView,
-    ExpenseEditView, SubmittablePasswordChangeView, EditProfileView, DeleteProfileView
+    ExpenseEditView, SubmittablePasswordChangeView,
+    EditProfileView, DeleteProfileView, ExpenseStatView
 )
 
 urlpatterns = [
@@ -41,5 +42,6 @@ urlpatterns = [
     path('expense/add', ExpenseCreateView.as_view(), name="add_expense"),
     path('expense/edit/<pk>', ExpenseEditView.as_view(), name="edit_expense"),
     path('expense/delete/<pk>', ExpenseDeleteView.as_view(), name="delete_expense"),
+    path('expense/stat', ExpenseStatView.as_view(), name="stat_expense"),
 
 ]

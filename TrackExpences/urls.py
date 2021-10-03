@@ -18,10 +18,11 @@ from django.urls import include, path
 from viewer.models import Budget, Profile, Expence
 from django.contrib.auth.views import LogoutView
 from viewer.views import WelcomeView, SubmitableLoginView, SubmitableSignUpView
+from viewer.admin import ProfileAdmin, BudgetAdmin, ExpenseAdmin
 
-admin.site.register(Budget)
-admin.site.register(Expence)
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Budget, BudgetAdmin)
+admin.site.register(Expence, ExpenseAdmin)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
