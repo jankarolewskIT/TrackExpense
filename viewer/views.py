@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.http import HttpResponse, HttpRequest
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
@@ -7,7 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from viewer.models.budget import Budget, Expence
 from viewer.models.profile import Profile
-from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm
+from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm, \
+    UpdateTotalBudgetForm
 
 
 class ExpenseCreateView(PermissionRequiredMixin, CreateView):
@@ -21,11 +23,6 @@ class ExpenseCreateView(PermissionRequiredMixin, CreateView):
         kwargs = super(ExpenseCreateView, self).get_form_kwargs()
         kwargs["request"] = self.request
         return kwargs
-
-    # def form_valid(self, form):
-    #     self.request.user.profile.budget.budget_left()
-    #     self.request.user.profile.budget.save()
-    #     return super().form_valid(form)
 
     def form_invalid(self, form):
         return render(
@@ -56,7 +53,7 @@ class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
         self.request.user.profile.budget.save()
-        return super().post(request)
+        return HttpRequest(request)
 
 
 class ExpenseStatView(View):
@@ -104,6 +101,7 @@ class ProfileView(LoginRequiredMixin, View):
         budget = self.request.user.profile.budget
         queryset = Expence.objects.filter(budget=budget)
         form = CreateExpenseForm
+        add_to_budget_form = UpdateTotalBudgetForm
 
         return render(
             request, template_name="profile.html",
@@ -111,9 +109,19 @@ class ProfileView(LoginRequiredMixin, View):
                 "expenses": queryset,
                 "budget": budget,
                 "categories": categories,
-                "form": form
+                "form": form,
+                "add_to_budget_form": add_to_budget_form
             }
         )
+
+    def post(self, request):
+        budget = self.request.user.profile.budget
+        # add_to_budget_form = UpdateTotalBudgetForm
+        income = request.POST.get("income")
+        budget.total_budget = budget.total_budget + int(income)
+        budget.save()
+        return self.get(request)
+
 
 
 class SubmitableLoginView(LoginView):

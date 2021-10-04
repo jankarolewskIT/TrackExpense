@@ -8,7 +8,7 @@ from django.forms import (
     CharField, DecimalField, NumberInput,
     TextInput, ModelForm, ChoiceField,
     Select, DateField, IntegerField, BooleanField,
-    CheckboxInput, SelectDateWidget, RadioSelect
+    CheckboxInput, SelectDateWidget, RadioSelect, Form
 
 )
 
@@ -227,16 +227,15 @@ class UpdateBudgetForm(ModelForm):
     )
 
 
-# class UpdateTotalBudgetForm(ModelForm):
-#     class Meta:
-#         model = Budget
-#
-#     income = DecimalField(
-#         label="Add",
-#         widget=NumberInput,
-#         decimal_places=2,
-#         max_digits=10000000
-#     )
-#
-#     def save(self, commit=True):
-#         income = self.cleaned_data["income"]
+class UpdateTotalBudgetForm(Form):
+    class Meta:
+        model = Budget
+        fields = ["income"]
+
+    income = DecimalField(
+        label="Add",
+        widget=NumberInput,
+        decimal_places=2,
+        max_digits=10000000
+    )
+
