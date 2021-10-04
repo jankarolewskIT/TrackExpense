@@ -6,6 +6,15 @@
 
 
 {% block content %}
-    {{ sum_transport }}
-    {{ saves }}
+    <div class="content">
+        <p>Expense sum for transport: {{ sum_transport }}</p>
+
+    </div>
+    <p>Expense sum for entertainment: {{ sum_entertainment }}</p>
+    <p>Expense sum for health: {{ sum_health }}</p>
+    <p>Expense sum for accommodation: {{ sum_accommodation }}</p>
+    <p>Expense sum for food: {{ sum_food }}</p>
+    <p>Expense sum for other: {{ sum_other }}</p>
+    <p>Your saves: {{ saves }}</p>
+
 {% endblock %}

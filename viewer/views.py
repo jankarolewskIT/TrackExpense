@@ -69,18 +69,29 @@ class ExpenseStatView(View):
         food_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="FD")
         accommodation_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="AD")
         other_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="OT")
-        sum_transport = 0
-        sum_all_expences = 0
-        for expense in expences:
-            sum_all_expences += expense.value
-        for expense in transport_query:
-            sum_transport += expense.value
+
+        sum_all_expences = sum(map(lambda x: x.value, expences))
+        sum_transport = sum(map(lambda x: x.value, transport_query))
+        sum_entertainment = sum(map(lambda x: x.value, entertainment_query))
+        sum_health = sum(map(lambda x: x.value, health_query))
+        sum_clothes = sum(map(lambda x: x.value, clothes_query))
+        sum_food = sum(map(lambda x: x.value, food_query))
+        sum_accommodation = sum(map(lambda x: x.value, accommodation_query))
+        sum_other = sum(map(lambda x: x.value, other_query))
+
         saves = self.request.user.profile.budget.total_budget - sum_all_expences
+
         return render(
             request, template_name="profile_stat.html",
             context={
                 "sum_transport": sum_transport,
-                "saves": saves
+                "saves": saves,
+                "sum_entertainment": sum_entertainment,
+                "sum_health": sum_health,
+                "sum_clothes": sum_clothes,
+                "sum_food": sum_food,
+                "sum_accommodation": sum_accommodation,
+                "sum_other": sum_other
             }
         )
 
