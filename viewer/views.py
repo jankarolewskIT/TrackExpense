@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest
 from django.urls import reverse_lazy
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -53,7 +53,7 @@ class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
         self.request.user.profile.budget.save()
-        return HttpRequest(request)
+        return super().post(request=request)
 
 
 class ExpenseStatView(View):
@@ -116,12 +116,10 @@ class ProfileView(LoginRequiredMixin, View):
 
     def post(self, request):
         budget = self.request.user.profile.budget
-        # add_to_budget_form = UpdateTotalBudgetForm
         income = request.POST.get("income")
-        budget.total_budget = budget.total_budget + int(income)
+        budget.total_budget = float(budget.total_budget) + float(income)
         budget.save()
         return self.get(request)
-
 
 
 class SubmitableLoginView(LoginView):
