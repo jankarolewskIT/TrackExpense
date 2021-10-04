@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab'
 ]
 
 MIDDLEWARE = [
@@ -98,6 +99,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+CRONJOBS = [
+    ('1 * * * *', 'viewer.cron.add_income_to_budget')
 ]
 
 
