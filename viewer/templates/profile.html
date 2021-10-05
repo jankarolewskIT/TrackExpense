@@ -43,16 +43,33 @@
     {% block expence_list %}
 
         <p><a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a></p>
+        <div class="container">
+        <ul class="list-group">
+            {% for obj in expenses %}
+                <li class="list-group-item list-group-item-dark">
+                <div class="row justify-content-center">
+                    <div class="col">
+                        <a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>
+                    </div>
+                    <div class="col">
+                        {{ obj.value }}zł
+                    </div>
+                    <div class="col">
+                        <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a>
+                    </div>
+                    <div class="col">
+                        {{ obj.date }}
+                    </div>
+                    <div class="col">
+                        <a href="{% url "delete_expense" obj.id %}">(Delete)</a>
+                        <a href="{% url "edit_expense" obj.id %}">(Edit)</a>
+                    </div>
+                </div>
+                </li>
+            {% endfor %}
+        </ul>
+        </div>
 
-        {% for obj in expenses %}
-        <table class="table table-striped">
-            <tr class="table-primary">
-                <a href="{% url "expence_detail" obj.id %}">{{ obj }}</a>| {{ obj.value }}zł | <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a> | {{ obj.date }}
-                <a href="{% url "delete_expense" obj.id %}">(Delete)</a>
-                <a href="{% url "edit_expense" obj.id %}">(Edit)</a>
-            </tr>
-        </table>
-        {% endfor %}
     {% endblock %}
     <a href="{% url "stat_expense" %}">Your stat</a>
 {% endblock %}
