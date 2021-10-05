@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# import viewer.cron
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -102,7 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CRONJOBS = [
-    ('*/1 * * * *', 'viewer.cron.add_income_to_budget')
+    ('*/1 * * * *', 'viewer.cron.add_income_to_budget'),
+    ('*/1 * * * *', 'viewer.cron.cycle_expense')
 ]
 
 

@@ -7,9 +7,6 @@ from django.db.models import (
 from viewer.models.profile import Profile
 
 
-# import profile
-
-
 class Budget(Model):
     profile = OneToOneField(Profile, on_delete=CASCADE, default=None)
     name = CharField(max_length=128, blank=True, null=True)
