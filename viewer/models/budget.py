@@ -17,6 +17,8 @@ class Budget(Model):
         for expense in queryset:
             self.total_budget -= expense.value
 
+        return self.total_budget
+
     def __str__(self):
         return f"{self.name} {self.total_budget}"
 

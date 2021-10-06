@@ -40,7 +40,7 @@
                   {% if user.profile.budget.name is not None %}
                         {{ user.profile.budget.name }}: {{ user.profile.budget.current_budget }}zł
                     {% else %}
-                        Budget: {{ user.profile.budget.total_budget }}zł
+                        Budget: {{ user.profile.budget.current_budget }}zł
                     {% endif %}
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="offcanvasNavbarDropdown2">
