@@ -6,70 +6,76 @@
 
 
 {% block content %}
+    <div class="d-flex justify-content-center">
+        <h3>Balance {{ budget.current_budget }}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">
+              +
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Current budget - {{ budget.current_budget }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ add_to_budget_form.as_p }}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" value="save" class="btn btn-primary">Save changes</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
 
-    <h3>{{ budget.current_budget }}
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          +
-        </button>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Current budget - {{ budget.current_budget }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ add_to_budget_form.as_p }}
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" value="save" class="btn btn-primary">Save changes</button>
-                </form>
-              </div>
-              <div class="modal-footer">
-
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-    </h3>
+        </h3>
+    </div>
     <!-- EXPENSE LIST -->
     {% block expence_list %}
 
         <div class="container">
-        <ul class="list-group">
-            {% for obj in expenses %}
-                <li class="list-group-item list-group-item-dark">
-                <div class="row justify-content-center">
-                    <div class="col">
-                        <a href="{% url "expence_detail" obj.id %}">{{ obj.name }}</a>
-                    </div>
-                    <div class="col">
-                        {{ obj.value }}zł
-                    </div>
-                    <div class="col">
-                        <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a>
-                    </div>
-                    <div class="col">
-                        {{ obj.date }}
-                    </div>
-                    <div class="col">
-                        <a href="{% url "edit_expense" obj.id %}">
-                            <i class="bi bi-x-circle-fill">Edit</i>
-                        </a>
+            <div class="row">
+            <ul class="list-group">
+                {% for obj in expenses %}
+                    <div>
+                        <li class="list-group-item {% cycle 'list-group-item-dark' 'list-group-item-light' %}">
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <a href="{% url "expence_detail" obj.id %}">{{ obj.name }}</a>
+                            </div>
+                            <div class="col">
+                                {{ obj.value }}zł
+                            </div>
+                            <div class="col">
+                                <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a>
+                            </div>
+                            <div class="col">
+                                {{ obj.date }}
+                            </div>
+                            <div class="col">
+                                <a href="{% url "edit_expense" obj.id %}">
+                                    <i class="bi bi-x-circle-fill">Edit</i>
+                                </a>
 
-                        <a href="{% url "delete_expense" obj.id %}">
-                            <i class="bi bi-pencil-square">Delete</i>
-                        </a>
+                                <a href="{% url "delete_expense" obj.id %}">
+                                    <i class="bi bi-pencil-square">Delete</i>
+                                </a>
+                            </div>
+                        </div>
+                        </li>
                     </div>
-                </div>
-                </li>
-            {% endfor %}
-        </ul>
+                {% endfor %}
+            </ul>
+            </div>
+            <div class="float-end">
+                <a class="btn btn-success" href="{% url "add_expense" %}" role="button">+Add expense</a>
+            </div>
         </div>
-        <p><a href="{% url "add_expense" %}">Add expense</a></p>
-
     {% endblock %}
 {% endblock %}
