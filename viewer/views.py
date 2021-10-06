@@ -1,8 +1,10 @@
+import json
+
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -41,19 +43,29 @@ class ExpenseEditView(PermissionRequiredMixin, UpdateView):
     permission_required = "viewer.change_expence"
 
 
-class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
-    model = Expence
-    success_url = reverse_lazy("home")
-    template_name = "delete_expense.html"
-    permission_required = "viewer.view_expence"
+def expense_delete(request, pk):
+    instance = get_object_or_404(Expence, id=pk)
+    instance.delete()
+    return redirect("home")
 
-    # def get_object(self, queryset=None):
-    #     return Expence.objects.get(id=self.kwargs["pk"])
-    #
-    # def post(self, request, *args, **kwargs):
-    #     self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
-    #     self.request.user.profile.budget.save()
-    #     return super().post(request=request)
+
+# class ExpenseDeleteView(PermissionRequiredMixin, View):
+#     model = Expence
+#     # success_url = reverse_lazy("home")
+#     permission_required = "viewer.view_expence"
+#
+#     def delete(self, request, pk):
+#         instance = Expence.objects.get(id=pk)
+#         instance.delete()
+#         return redirect("home")
+
+# def get_object(self, queryset=None):
+#     return Expence.objects.get(id=self.kwargs["pk"])
+#
+# def post(self, request, *args, **kwargs):
+#     self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
+#     self.request.user.profile.budget.save()
+#     return super().post(request=request)
 
 
 class ExpenseStatView(View):
@@ -102,6 +114,13 @@ class ProfileView(LoginRequiredMixin, View):
         queryset = Expence.objects.filter(budget=budget)
         form = CreateExpenseForm
         add_to_budget_form = UpdateTotalBudgetForm
+
+        # if request.method == "DELETE":
+        #     id = json.loads(request.body)["id"]
+        #     expense = get_object_or_404(Expence, id=id)
+        #     expense.delete()
+        #
+        #     return HttpResponse("")
 
         return render(
             request, template_name="profile.html",

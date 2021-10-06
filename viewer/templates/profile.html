@@ -56,8 +56,13 @@
                         {{ obj.date }}
                     </div>
                     <div class="col">
-                        <a href="{% url "delete_expense" obj.id %}">(Delete)</a>
-                        <a href="{% url "edit_expense" obj.id %}">(Edit)</a>
+                        <a href="{% url "edit_expense" obj.id %}">
+                            <i class="bi bi-x-circle-fill">Edit</i>
+                        </a>
+
+                        <a href="{% url "delete_expense" obj.id %}">
+                            <i class="bi bi-pencil-square">Delete</i>
+                        </a>
                     </div>
                 </div>
                 </li>
