@@ -9,7 +9,7 @@
 
     <h3>{{ budget.total_budget }}
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
           +
         </button>
         <!-- Modal -->
@@ -35,14 +35,9 @@
           </div>
         </div>
     </h3>
-    <p><a href="{% url "edit_profile" user.profile.id %}">Edit Profile</a></p>
-    <p><a href="{% url "delete_profile" user.profile.id %}">Delete Profile</a></p>
-    <p><a href="{% url "add_expense" %}">Add</a></p>
     <!-- EXPENSE LIST -->
-    <p><a href="{% url "change_password" %}">Change password</a></p>
     {% block expence_list %}
 
-        <p><a href="{% url "edit_budget" budget.id %}">Edit {{ user }} budget</a></p>
         <div class="container">
         <ul class="list-group">
             {% for obj in expenses %}
@@ -69,7 +64,7 @@
             {% endfor %}
         </ul>
         </div>
+        <p><a href="{% url "add_expense" %}">Add expense</a></p>
 
     {% endblock %}
-    <a href="{% url "stat_expense" %}">Your stat</a>
 {% endblock %}
