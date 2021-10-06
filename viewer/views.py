@@ -145,7 +145,7 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
-        queryset = Expence.objects.filter(budget=budget)
+        queryset = Expence.objects.filter(budget=budget).filter(is_archive=False)
         form = CreateExpenseForm
         add_to_budget_form = UpdateTotalBudgetForm
 

@@ -153,6 +153,7 @@ class UpdateExpenseForm(ModelForm):
     #         budget.save()
     #     return budget
 
+
 # =====================================================================
 # Profile Forms
 # =======================================================================
@@ -214,7 +215,9 @@ class SignUpForm(UserCreationForm):
 class UpdateProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ["income"]
+        fields = [ "pay_day", "income"]
+
+
 
     income = DecimalField(
         label="Enter Your income",
@@ -222,6 +225,13 @@ class UpdateProfileForm(ModelForm):
         max_digits=100000000,
         widget=NumberInput
 
+    )
+
+    pay_day = DecimalField(
+        label="Income date",
+        widget=NumberInput,
+        max_digits=2,
+        decimal_places=0
     )
 
 

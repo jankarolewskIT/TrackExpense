@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CRONJOBS = [
     ('*/1 * * * *', 'viewer.cron.add_income_to_budget'),
-    ('*/1 * * * *', 'viewer.cron.cycle_expense')
+    ('*/2 * * * *', 'viewer.cron.cycle_expense')
 ]
 
 
