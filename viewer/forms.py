@@ -25,7 +25,6 @@ class CreateExpenseForm(ModelForm):
         self.request = kwargs.pop('request')
         super(CreateExpenseForm, self).__init__(*args, **kwargs)
         self.budget = Budget.objects.filter(profile=self.request.user.profile)
-        # self.fields["value"].validators.append(BudgetGraterExpense(self.request))
 
     class Meta:
         model = Expence

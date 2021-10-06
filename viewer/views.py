@@ -87,7 +87,7 @@ def expense_delete(request, pk):
     budget = request.user.profile.budget
     # budget.total_budget += instance.value
     instance.delete()
-    budget.save()
+    # budget.save()
     return redirect("home")
 
 

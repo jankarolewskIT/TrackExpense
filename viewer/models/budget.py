@@ -17,9 +17,8 @@ class Budget(Model):
         total_expenses = 0
         for expense in queryset:
             total_expenses += expense.value
-        # self.total_budget = round(self.total_budget, 2)
-
-        return round(self.total_budget - total_expenses, 2)
+        total_expenses = float(total_expenses)
+        return round(float(self.total_budget) - total_expenses, 2)
 
     def __str__(self):
         return f"{self.name} {self.total_budget}"
