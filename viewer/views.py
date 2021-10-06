@@ -42,10 +42,52 @@ class ExpenseEditView(PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_expence"
 
+    def get_form_kwargs(self):
+        kwargs = super(ExpenseEditView, self).get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
+
+    def form_valid(self, form):
+        self.request.user.profile.budget.current_budget()
+        return super().form_valid(form)
+
+
+# def expense_edit_view(request, pk):
+#     instance = get_object_or_404(Expence, id=pk)
+#     budget = request.user.profile.budget
+#     budget.total_budget += instance.value
+#     # instance.delete()
+#     budget.save()
+#     if request.method == "POST":
+#         form = UpdateExpenseForm(request.POST)
+#         if form.is_valid():
+#             new_obj = Expence.objects.create(
+#                 name=form.cleaned_data["name"],
+#                 value=form.cleaned_data["value"],
+#                 budget=instance.budget,
+#                 category=form.cleaned_data["category"],
+#                 is_cycle=form.cleaned_data["is_cycle"],
+#                 expense_monthly_date=form.cleaned_data["expense_monthly_date"]
+#             )
+#             budget.total_budget -= new_obj.value
+#             instance.delete()
+#             budget.save()
+#             return redirect("home")
+#     form = UpdateExpenseForm()
+#     return render(
+#         request, template_name="add_edit_expense.html",
+#         context={
+#             "form": form
+#         }
+#     )
+
 
 def expense_delete(request, pk):
     instance = get_object_or_404(Expence, id=pk)
+    budget = request.user.profile.budget
+    # budget.total_budget += instance.value
     instance.delete()
+    budget.save()
     return redirect("home")
 
 
@@ -58,14 +100,6 @@ def expense_delete(request, pk):
 #         instance = Expence.objects.get(id=pk)
 #         instance.delete()
 #         return redirect("home")
-
-# def get_object(self, queryset=None):
-#     return Expence.objects.get(id=self.kwargs["pk"])
-#
-# def post(self, request, *args, **kwargs):
-#     self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
-#     self.request.user.profile.budget.save()
-#     return super().post(request=request)
 
 
 class ExpenseStatView(View):
@@ -114,13 +148,6 @@ class ProfileView(LoginRequiredMixin, View):
         queryset = Expence.objects.filter(budget=budget)
         form = CreateExpenseForm
         add_to_budget_form = UpdateTotalBudgetForm
-
-        # if request.method == "DELETE":
-        #     id = json.loads(request.body)["id"]
-        #     expense = get_object_or_404(Expence, id=id)
-        #     expense.delete()
-        #
-        #     return HttpResponse("")
 
         return render(
             request, template_name="profile.html",

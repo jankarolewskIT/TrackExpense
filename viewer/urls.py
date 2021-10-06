@@ -22,8 +22,8 @@ from django.contrib.auth.views import (
 from viewer.views import (
     ProfileView, ExpenceDetailView, CategoryDetailView,
     EditBudgetView, ExpenseCreateView,
-    ExpenseEditView, SubmittablePasswordChangeView,
-    EditProfileView, DeleteProfileView, ExpenseStatView, expense_delete
+    SubmittablePasswordChangeView,
+    EditProfileView, DeleteProfileView, ExpenseStatView, expense_delete, ExpenseEditView
 )
 
 urlpatterns = [

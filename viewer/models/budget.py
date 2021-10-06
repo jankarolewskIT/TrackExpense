@@ -2,7 +2,7 @@ from datetime import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, OneToOneField, CASCADE, DateField, ForeignKey, BooleanField,
-    IntegerField, TextChoices
+    IntegerField, TextChoices, FloatField
 )
 from viewer.models.profile import Profile
 
@@ -14,10 +14,12 @@ class Budget(Model):
 
     def current_budget(self):
         queryset = Expence.objects.filter(budget=self)
+        total_expenses = 0
         for expense in queryset:
-            self.total_budget -= expense.value
+            total_expenses += expense.value
+        # self.total_budget = round(self.total_budget, 2)
 
-        return self.total_budget
+        return round(self.total_budget - total_expenses, 2)
 
     def __str__(self):
         return f"{self.name} {self.total_budget}"

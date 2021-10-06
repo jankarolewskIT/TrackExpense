@@ -16,47 +16,9 @@ from viewer.models.profile import Profile
 from viewer.models.budget import Budget, Expence
 
 
-# from viewer.models.expence import Expence
-
-
-class UpdateExpenseForm(ModelForm):
-    class Meta:
-        model = Expence
-        fields = ["name", "value", "category", "is_cycle", "expense_monthly_date"]
-
-        name = CharField(
-            label="Expense name: ",
-            max_length=128,
-            widget=TextInput
-        )
-
-        value = DecimalField(
-            label="Amount: ",
-            validators=[],
-            max_digits=100000000,
-            decimal_places=2,
-            min_value=0.01
-        )
-
-        category = ChoiceField(
-            choices=Expence.Catagory.choices,
-            label="Category: ",
-            widget=Select
-        )
-        is_cycle = BooleanField(
-            label="Is cycle?",
-            initial=False,
-            widget=CheckboxInput
-        )
-
-        expense_monthly_date = IntegerField(
-            label="Day od cycle",
-            min_value=1,
-            max_value=31,
-            widget=NumberInput
-
-        )
-
+# =====================================================================
+# Expense Forms
+# =======================================================================
 
 class CreateExpenseForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -110,7 +72,7 @@ class CreateExpenseForm(ModelForm):
 
     def clean_value(self):
         data = self.cleaned_data["value"]
-        if data > self.request.user.profile.budget.total_budget:
+        if data > self.request.user.profile.budget.current_budget():
             raise ValidationError("Budget not enough")
         return data
 
@@ -134,8 +96,67 @@ class CreateExpenseForm(ModelForm):
         )
         if commit:
             expense.save()
+            budget.current_budget()
+            budget.save()
         return expense
 
+
+class UpdateExpenseForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(UpdateExpenseForm, self).__init__(*args, **kwargs)
+        self.budget = Budget.objects.filter(profile=self.request.user.profile)
+
+    class Meta:
+        model = Expence
+        fields = ["name", "value", "category", "is_cycle", "expense_monthly_date"]
+
+    name = CharField(
+        label="Expense name: ",
+        max_length=128,
+        widget=TextInput
+    )
+
+    value = DecimalField(
+        label="Amount: ",
+        validators=[],
+        max_digits=100000000,
+        decimal_places=2,
+        min_value=0.01
+    )
+
+    category = ChoiceField(
+        choices=Expence.Catagory.choices,
+        label="Category: ",
+        widget=Select
+    )
+    is_cycle = BooleanField(
+        label="Is cycle?",
+        initial=False,
+        required=False,
+        widget=CheckboxInput
+    )
+
+    expense_monthly_date = IntegerField(
+        label="Day od cycle",
+        min_value=1,
+        max_value=31,
+        required=False,
+        widget=NumberInput
+
+    )
+
+    # def save(self, commit=True):
+    #     budget = self.request.user.profile.budget
+    #     budget.total_budget = float(budget.total_budget)
+    #     budget.total_budget += self.request.
+    #     if commit:
+    #         budget.save()
+    #     return budget
+
+# =====================================================================
+# Profile Forms
+# =======================================================================
 
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -205,6 +226,11 @@ class UpdateProfileForm(ModelForm):
     )
 
 
+# =====================================================================
+# Budget Forms
+# =======================================================================
+
+
 class UpdateBudgetForm(ModelForm):
     class Meta:
         model = Budget
@@ -236,4 +262,3 @@ class UpdateTotalBudgetForm(Form):
         decimal_places=2,
         max_digits=10000000
     )
-
