@@ -134,8 +134,6 @@ class CreateExpenseForm(ModelForm):
         )
         if commit:
             expense.save()
-            budget.total_budget = budget.total_budget - value
-            budget.save()
         return expense
 
 

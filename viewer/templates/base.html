@@ -38,7 +38,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {% if user.profile.budget.name is not None %}
-                        {{ user.profile.budget.name }}: {{ user.profile.budget.total_budget }}zł
+                        {{ user.profile.budget.name }}: {{ user.profile.budget.current_budget }}zł
                     {% else %}
                         Budget: {{ user.profile.budget.total_budget }}zł
                     {% endif %}

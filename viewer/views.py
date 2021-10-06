@@ -47,13 +47,13 @@ class ExpenseDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = "delete_expense.html"
     permission_required = "viewer.view_expence"
 
-    def get_object(self, queryset=None):
-        return Expence.objects.get(id=self.kwargs["pk"])
-
-    def post(self, request, *args, **kwargs):
-        self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
-        self.request.user.profile.budget.save()
-        return super().post(request=request)
+    # def get_object(self, queryset=None):
+    #     return Expence.objects.get(id=self.kwargs["pk"])
+    #
+    # def post(self, request, *args, **kwargs):
+    #     self.request.user.profile.budget.total_budget = self.request.user.profile.budget.total_budget + self.get_object().value
+    #     self.request.user.profile.budget.save()
+    #     return super().post(request=request)
 
 
 class ExpenseStatView(View):
