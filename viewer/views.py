@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
@@ -142,10 +143,17 @@ class ExpenseStatView(View):
 class ProfileView(LoginRequiredMixin, View):
     model = Expence
 
+    # def listing(self, request):
+    #     expense_list =
+
     def get(self, request):
         categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
-        queryset = Expence.objects.filter(budget=budget).filter(is_archive=False)
+        queryset = Expence.objects.filter(budget=budget).filter(is_archive=False).order_by("-id")
+        paginator = Paginator(queryset, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
         form = CreateExpenseForm
         add_to_budget_form = UpdateTotalBudgetForm
 
@@ -156,7 +164,8 @@ class ProfileView(LoginRequiredMixin, View):
                 "budget": budget,
                 "categories": categories,
                 "form": form,
-                "add_to_budget_form": add_to_budget_form
+                "add_to_budget_form": add_to_budget_form,
+                "page_obj": page_obj
             }
         )
 
