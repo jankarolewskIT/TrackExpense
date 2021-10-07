@@ -103,6 +103,21 @@ def expense_delete(request, pk):
 #         return redirect("home")
 
 
+def charts_pie(request):
+    labels = []
+    data = []
+
+    queryset = Expence.objects.order_by('-id')[:5]
+    for expense in queryset:
+        labels.append(expense.name)
+        data.append(expense.value)
+
+    return render(request, 'chart_test.html', {
+        'labels': labels,
+        'data': data,
+    })
+
+
 class ExpenseStatView(View):
     def get(self, request):
         expences = Expence.objects.filter(budget=self.request.user.profile.budget)
