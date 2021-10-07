@@ -1,5 +1,5 @@
 import json
-
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.paginator import Paginator
@@ -147,6 +147,7 @@ class ProfileView(LoginRequiredMixin, View):
     #     expense_list =
 
     def get(self, request):
+        queryset1 = Budget.objects.filter(profile__pay_day=datetime.now().day)
         categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
         queryset = Expence.objects.filter(budget=budget).filter(is_archive=False).order_by("-id")
@@ -165,7 +166,8 @@ class ProfileView(LoginRequiredMixin, View):
                 "categories": categories,
                 "form": form,
                 "add_to_budget_form": add_to_budget_form,
-                "page_obj": page_obj
+                "page_obj": page_obj,
+                "queryset": queryset1[0]
             }
         )
 

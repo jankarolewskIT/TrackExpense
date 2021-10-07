@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, OneToOneField, CASCADE, DateField, ForeignKey, BooleanField,
@@ -17,8 +18,8 @@ class Budget(Model):
         total_expenses = 0
         for expense in queryset:
             total_expenses += expense.value
-        total_expenses = float(total_expenses)
-        return round(float(self.total_budget) - total_expenses, 2)
+        # total_expenses = float(total_expenses)
+        return round(Decimal(self.total_budget) - Decimal(total_expenses), 2)
 
     def __str__(self):
         return f"{self.name} {self.total_budget}"
