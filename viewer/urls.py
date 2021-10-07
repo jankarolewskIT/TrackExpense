@@ -23,7 +23,7 @@ from viewer.views import (
     ProfileView, ExpenceDetailView, CategoryDetailView,
     EditBudgetView, ExpenseCreateView,
     SubmittablePasswordChangeView,
-    EditProfileView, DeleteProfileView, ExpenseStatView, expense_delete, ExpenseEditView
+    EditProfileView, DeleteProfileView, ExpenseStatView, expense_delete, ExpenseEditView, charts_pie
 )
 
 urlpatterns = [
