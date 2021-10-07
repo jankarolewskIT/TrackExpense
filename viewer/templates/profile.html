@@ -41,10 +41,10 @@
 
         <div class="container">
             <div class="row">
-            <ul class="list-group">
-                {% for obj in expenses %}
+            <ul class="list-group pagination">
+                {% for obj in page_obj %}
                     <div>
-                        <li class="list-group-item {% cycle 'list-group-item-dark' 'list-group-item-light' %}">
+                        <li class="list-group-item {% cycle 'list-group-item-dark' 'list-group-item-light' %} page-item">
                         <div class="row justify-content-center">
                             <div class="col">
                                 <a href="{% url "expence_detail" obj.id %}">{{ obj.name }}</a>
@@ -60,11 +60,11 @@
                             </div>
                             <div class="col">
                                 <a href="{% url "edit_expense" obj.id %}">
-                                    <i class="bi bi-x-circle-fill">Edit</i>
+                                    <i class="bi bi-pencil-square">Edit</i>
                                 </a>
 
                                 <a href="{% url "delete_expense" obj.id %}">
-                                    <i class="bi bi-pencil-square">Delete</i>
+                                    <i class="bi bi-x-circle-fill">Delete</i>
                                 </a>
                             </div>
                         </div>
@@ -78,4 +78,27 @@
             </div>
         </div>
     {% endblock %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination position-absolute d-flex justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span class="text-success" aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link text-success" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+
+        <li class="page-item active"><a class="page-link border border-success mb-2 bg-success text-white" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link text-success" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span class="text-success" aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+        {% endif %}
+      </ul>
+    </nav>
 {% endblock %}
