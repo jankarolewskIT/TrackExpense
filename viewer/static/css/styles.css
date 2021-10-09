@@ -47,7 +47,55 @@ table {
   border-spacing: 0;
 }
 
+/*
+================================
+ LINKS
+===================================
+ */
 
-a {
-    color: red!important;
+nav a {
+  color: white !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid #dfe2e5 !important;
+}
+ul li a{
+  color: #006e2c;
+}
+a:hover {
+  color: #a9b2b9 !important;
+}
+
+
+.form-group p {
+  margin-bottom: 20px;
+}
+
+
+.form-group input {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 10px;
+}
+
+.info-stat-category p {
+  margin-bottom: 10px;
+
+}
+
+.row .justify-content-center p {
+  margin-bottom: 20px;
+}
+
+.col-form-label {
+  display: block;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.unloged a {
+  color: white;
 }

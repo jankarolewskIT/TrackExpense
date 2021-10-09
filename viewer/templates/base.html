@@ -81,8 +81,10 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="btn btn-success" href="{% url "login" %}" role="button">Log In</a>
-                                <a class="btn btn-success" href="{% url "register" %}" role="button">Sign In</a>
+                                <div class="unloged">
+                                    <a class="btn btn-success" style="color: white" href="{% url "login" %}" role="button">Log In</a>
+                                    <a class="btn btn-success" style="color: white" href="{% url "register" %}" role="button">Sign In</a>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -94,7 +96,7 @@
     </nav>
 </section>
 <section class="container justify-content" style="padding-top: 100px">
-    <div class="content">
+    <div class="justify-content-center">
 
 
         {% block content %}

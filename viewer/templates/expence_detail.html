@@ -5,11 +5,30 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ expence.name }}</h1>
-<h3>{{ expence.value }}</h3>
-<h3><a>{{ expence.category }}</a></h3>
-<h3>{{ expence.date }}</h3>
+<div class="d-flex bd-highlight">
+<div class="justify-content-center">
+    <label class="col-form-label">
+        <strong>Nazwa: </strong>
+        <p>{{ expence.name }}</p>
+    </label>
 
-<a href="{% url "home" %}">(BACK)</a>
+    <label class="col-form-label">
+        <strong>Value: </strong>
+        <p>{{ expence.value }}</p>
+    </label>
 
+    <label class="col-form-label">
+        <strong>Category: </strong>
+        <p>{{ expence.category }}</p>
+    </label>
+
+    <label class="col-form-label">
+        <strong>Date: </strong>
+        <p>{{ expence.date }}</p>
+    </label>
+
+
+</div>
+</div>
+<a class="btn btn-success" href="{% url "home" %}" role="button">Home</a>
 {% endblock %}

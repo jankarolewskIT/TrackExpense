@@ -239,8 +239,8 @@ class CategoryDetailView(PermissionRequiredMixin, View):
         for expense in category_expenses:
             total_category_expenses += expense.value
 
-        category_to_all = round(total_category_expenses / total_expenses, 2)
-        category_to_budget = round(total_category_expenses / total_budget, 2)
+        category_to_all = round(total_category_expenses / total_expenses * 100, 2)
+        category_to_budget = round(total_category_expenses / total_budget * 100, 2)
 
         return render(
             request, template_name="category_detail.html",

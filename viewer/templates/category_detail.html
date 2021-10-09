@@ -5,11 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Category: {{ category }}</h1>
-    <p>Sum wydatków w kategorii: {{ total_category_expenses }}</p>
-    <p>Udział wydatków kategorii do wszystkich wydatków: {{ category_to_all }}</p>
-    <p>Udział wydatków kategorii w budżecie: {{ category_to_budget }}</p>
 
-    <a href="{% url "home" %}">(BACK)</a>
+    {% if budget.name is not None and budget.name != "" %}
+        {{ category }} in {{ budget.name }}
+    {% else %}
+        {{ category }} in budget
+    {% endif %}
+    <div class="progress" style="margin-bottom: 30px">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{ category_to_budget }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ category_to_budget }}%">{{ category_to_budget }}</div>
+    </div>
+    {{ category }} to all expenses
+    <div class="progress" style="margin-bottom: 30px">
+      <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-valuenow="{{ category_to_all }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ category_to_all }}%">{{ category_to_all }}</div>
+    </div>
+
+    <div class="info-stat-category">
+        <p><strong>Sum wydatków w kategorii: {{ total_category_expenses }}zł</strong></p>
+        <p><strong>Udział wydatków kategorii do wszystkich wydatków: {{ category_to_all }}zł</strong></p>
+        <p><strong>Udział wydatków kategorii w budżecie: {{ category_to_budget }}zł </strong></p>
+    </div>
+
+    <a class="btn btn-success" href="{% url "home" %}" role="button">Home</a>
 {% endblock %}
 
