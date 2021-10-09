@@ -285,7 +285,7 @@ class DeleteProfileView(PermissionRequiredMixin, View):
 class EditProfileView(PermissionRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
-    template_name = "form.html"
+    template_name = "edit_profile.html"
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_profile"
 
