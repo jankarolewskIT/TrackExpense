@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import (
-    UserCreationForm
+    UserCreationForm, PasswordChangeForm
 )
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
@@ -231,6 +231,14 @@ class UpdateProfileForm(ModelForm):
         max_digits=2,
         decimal_places=0
     )
+
+
+class FormPasswordChange(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form.control"
+
 
 
 # =====================================================================

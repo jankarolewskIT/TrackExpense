@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     Model, CharField, DecimalField, OneToOneField, CASCADE, DateField, ForeignKey, BooleanField,
-    IntegerField, TextChoices, FloatField
+    IntegerField, TextChoices, FloatField, DateTimeField
 )
 from viewer.models.profile import Profile
 
@@ -28,7 +28,7 @@ class Budget(Model):
 class Expence(Model):
     name = CharField(max_length=128)
     value = DecimalField(max_digits=10000, decimal_places=2)
-    date = DateField(auto_now_add=True)
+    date = DateTimeField(auto_now_add=True, null=True)
     budget = ForeignKey(Budget, on_delete=CASCADE, null=True)
     is_archive = BooleanField(default=False, null=True, blank=True)
     is_cycle = BooleanField(default=False)

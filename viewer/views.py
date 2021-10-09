@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from viewer.models.budget import Budget, Expence
 from viewer.models.profile import Profile
 from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm, \
-    UpdateTotalBudgetForm
+    UpdateTotalBudgetForm, FormPasswordChange
 
 
 class ExpenseCreateView(PermissionRequiredMixin, CreateView):
@@ -53,34 +53,7 @@ class ExpenseEditView(PermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-# def expense_edit_view(request, pk):
-#     instance = get_object_or_404(Expence, id=pk)
-#     budget = request.user.profile.budget
-#     budget.total_budget += instance.value
-#     # instance.delete()
-#     budget.save()
-#     if request.method == "POST":
-#         form = UpdateExpenseForm(request.POST)
-#         if form.is_valid():
-#             new_obj = Expence.objects.create(
-#                 name=form.cleaned_data["name"],
-#                 value=form.cleaned_data["value"],
-#                 budget=instance.budget,
-#                 category=form.cleaned_data["category"],
-#                 is_cycle=form.cleaned_data["is_cycle"],
-#                 expense_monthly_date=form.cleaned_data["expense_monthly_date"]
-#             )
-#             budget.total_budget -= new_obj.value
-#             instance.delete()
-#             budget.save()
-#             return redirect("home")
-#     form = UpdateExpenseForm()
-#     return render(
-#         request, template_name="add_edit_expense.html",
-#         context={
-#             "form": form
-#         }
-#     )
+
 
 
 def expense_delete(request, pk):
@@ -92,15 +65,6 @@ def expense_delete(request, pk):
     return redirect("home")
 
 
-# class ExpenseDeleteView(PermissionRequiredMixin, View):
-#     model = Expence
-#     # success_url = reverse_lazy("home")
-#     permission_required = "viewer.view_expence"
-#
-#     def delete(self, request, pk):
-#         instance = Expence.objects.get(id=pk)
-#         instance.delete()
-#         return redirect("home")
 
 
 def charts_pie(request):
@@ -120,7 +84,9 @@ def charts_pie(request):
 
 class ExpenseStatView(View):
     def get(self, request):
-        expences = Expence.objects.filter(budget=self.request.user.profile.budget)
+        budget_value = self.request.user.profile.budget.total_budget
+
+        expenses = Expence.objects.filter(budget=self.request.user.profile.budget)
         transport_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="TR")
         entertainment_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="ET")
         health_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="PH")
@@ -129,16 +95,37 @@ class ExpenseStatView(View):
         accommodation_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="AD")
         other_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="OT")
 
-        sum_all_expences = sum(map(lambda x: x.value, expences))
-        sum_transport = sum(map(lambda x: x.value, transport_query))
-        sum_entertainment = sum(map(lambda x: x.value, entertainment_query))
-        sum_health = sum(map(lambda x: x.value, health_query))
-        sum_clothes = sum(map(lambda x: x.value, clothes_query))
-        sum_food = sum(map(lambda x: x.value, food_query))
-        sum_accommodation = sum(map(lambda x: x.value, accommodation_query))
-        sum_other = sum(map(lambda x: x.value, other_query))
+        sum_all_expences = sum(map(lambda x: x.value, expenses))
 
-        saves = self.request.user.profile.budget.total_budget - sum_all_expences
+        # Transport Stat
+        sum_transport = sum(map(lambda x: x.value, transport_query))
+        transport_in_budget = round(sum_transport / budget_value * 100,2)
+
+        # Entertainment Stat
+        sum_entertainment = sum(map(lambda x: x.value, entertainment_query))
+        entertainment_in_budget = round(sum_entertainment / budget_value * 100, 2)
+
+        # Health Stat
+        sum_health = sum(map(lambda x: x.value, health_query))
+        health_in_budget = round(sum_health / budget_value * 100, 2)
+
+        # Clothes Stat
+        sum_clothes = sum(map(lambda x: x.value, clothes_query))
+        clothes_in_budget = round(sum_clothes / budget_value * 100, 2 )
+
+        # Food Stat
+        sum_food = sum(map(lambda x: x.value, food_query))
+        food_in_budget = round(sum_food / budget_value * 100)
+        # Accommodation Stat
+        sum_accommodation = sum(map(lambda x: x.value, accommodation_query))
+        accommodation_in_budget = round(sum_accommodation / budget_value * 100, 2)
+
+        # Other Stat
+        sum_other = sum(map(lambda x: x.value, other_query))
+        other_in_budget = round(sum_other / budget_value * 100, 2)
+
+        saves = budget_value - sum_all_expences
+        saves_in_budget = round(saves/budget_value * 100, 2)
 
         return render(
             request, template_name="profile_stat.html",
@@ -150,7 +137,17 @@ class ExpenseStatView(View):
                 "sum_clothes": sum_clothes,
                 "sum_food": sum_food,
                 "sum_accommodation": sum_accommodation,
-                "sum_other": sum_other
+                "sum_other": sum_other,
+                "transport_in_budget": transport_in_budget,
+                "entertainment_in_budget": entertainment_in_budget,
+                "health_in_budget": health_in_budget,
+                "clothes_in_budget": clothes_in_budget,
+                "food_in_budget": food_in_budget,
+                "accommodation_in_budget":accommodation_in_budget,
+                "other_in_budget": other_in_budget,
+                "saves_in_budget": saves_in_budget
+
+
             }
         )
 
@@ -205,9 +202,10 @@ class SubmitableSignUpView(CreateView):
 
 
 class SubmittablePasswordChangeView(LoginRequiredMixin, PermissionRequiredMixin, PasswordChangeView):
-    template_name = "form.html"
+    template_name = "password_change.html"
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_profile"
+    form_class = FormPasswordChange
 
 
 class WelcomeView(TemplateView):

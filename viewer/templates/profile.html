@@ -8,7 +8,7 @@
 {% block content %}
 
     <div class="d-flex justify-content-center">
-        <h3>Balance {{ budget.current_budget }}
+        <h1>Balance {{ budget.current_budget }}
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-success btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal">
               +
@@ -35,7 +35,7 @@
                 </div>
               </div>
             </div>
-        </h3>
+        </h1>
     </div>
     <!-- EXPENSE LIST -->
     {% block expence_list %}
@@ -57,7 +57,7 @@
                                 <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a>
                             </div>
                             <div class="col">
-                                {{ obj.date }}
+                                {{ obj.date | date:"d.m.Y" }}
                             </div>
                             <div class="col">
                                 <a href="{% url "edit_expense" obj.id %}">
@@ -81,6 +81,7 @@
     {% endblock %}
     <nav aria-label="Page navigation example">
       <ul class="pagination position-absolute d-flex justify-content-center">
+      {% if page_obj.has_other_pages %}
         {% if page_obj.has_previous %}
             <li class="page-item">
               <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
@@ -100,6 +101,7 @@
               </a>
             </li>
         {% endif %}
+      {% endif %}
       </ul>
     </nav>
 {% endblock %}
