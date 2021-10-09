@@ -182,7 +182,7 @@ class ProfileView(LoginRequiredMixin, View):
                 "form": form,
                 "add_to_budget_form": add_to_budget_form,
                 "page_obj": page_obj,
-                "queryset": queryset1[0]
+                "queryset": queryset
             }
         )
 
@@ -269,7 +269,7 @@ class DeleteProfileView(PermissionRequiredMixin, DeleteView):
 class EditProfileView(PermissionRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
-    template_name = "form.html"
+    template_name = "edit_profile.html"
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_profile"
 
