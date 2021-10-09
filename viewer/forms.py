@@ -159,6 +159,11 @@ class UpdateExpenseForm(ModelForm):
 # =======================================================================
 
 class SignUpForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
     class Meta(UserCreationForm.Meta):
         fields = ["username"]
 
@@ -243,7 +248,6 @@ class FormPasswordChange(PasswordChangeForm):
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form.control"
-
 
 
 # =====================================================================
