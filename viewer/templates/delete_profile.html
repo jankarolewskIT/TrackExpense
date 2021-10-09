@@ -1,16 +1,21 @@
 {% extends "base.html" %}
-
 {% block title %}
     Delete Profile
 {% endblock %}
-
 {% block content %}
     <form method="post">
         {% csrf_token %}
+         <!--
         <p>
-            Are you sure want to delete your profile, {{ object }}?
-
+            Are you sure want to delete your profile: {{ object }} ?
         </p>
-        <input type="submit" value="Yes" class="btn btn-danger">
+          <input type="submit" value="Yes" class="btn btn-danger">
+          -->
+        <div class="alert alert-danger" role="alert">
+            Are you sure want to delete your profile: {{ object }} ?
+            <input type="submit" value="Yes" class="btn btn-danger">
+        </div>
+        <a class="btn btn-primary" href="{% url "home" %}" role="button">BACK</a>
+    <!-- <a href="{% url "home" %}">(<-- BACK)</a> -->
     </form>
 {% endblock %}

@@ -248,12 +248,14 @@ class UpdateBudgetForm(ModelForm):
     name = CharField(
         label="Enter your budget name: ",
         min_length=2,
+        required=False,
         widget=TextInput
     )
 
     total_budget = DecimalField(
         label="Enter your budget: ",
         min_value=0,
+        required=False,
         max_digits=10000000,
         decimal_places=2,
         widget=NumberInput
