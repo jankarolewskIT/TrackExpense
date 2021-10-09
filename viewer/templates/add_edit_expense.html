@@ -10,9 +10,30 @@
     <form method="post">
         {% csrf_token %}
         {{ form.none_filed_errors }}
-        {{ form.as_p }}
-    <button type="submit" value="Save">Save</button>
+
+        {{ form.name.errors }}
+        <label for="{{ form.name.id_for_label }}">Enter expense name:</label>
+        <p>{{ form.name }}</p>
+
+        {{ form.value.errors }}
+        <label for="{{ form.value.id_for_label }}">Enter expense amount:</label>
+        <p>{{ form.value }}</p>
+
+        {{ form.category.errors }}
+        <label for="{{ form.category.id_for_label }}">Enter expense category:</label>
+        <p>{{ form.category }}</p>
+
+        {{ form.is_cycle.errors }}
+        <label for="{{ form.is_cycle.id_for_label }}">Is cycle?</label>
+        <p>{{ form.is_cycle }}</p>
+
+        {{ form.expense_monthly_date.errors }}
+        <label for="{{ form.expense_monthly_date.id_for_label }}">Enter monthly date:</label>
+        <p>{{ form.expense_monthly_date }}</p>
+
+    <button type="submit" class="btn btn-success">Save</button>
     </form>
 
-<a href="{% url "home" %}">(BACK)</a>
+
+    <a class="btn btn-success float-end" href="{% url "home" %}" role="button">Home</a>
 {% endblock %}
