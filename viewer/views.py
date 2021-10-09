@@ -162,7 +162,6 @@ class ProfileView(LoginRequiredMixin, View):
     #     expense_list =
 
     def get(self, request):
-        queryset1 = Budget.objects.filter(profile__pay_day=datetime.now().day)
         categories = [category[1] for category in Expence.Catagory.choices]
         budget = self.request.user.profile.budget
         queryset = Expence.objects.filter(budget=budget).filter(is_archive=False).order_by("-id")
@@ -181,8 +180,8 @@ class ProfileView(LoginRequiredMixin, View):
                 "categories": categories,
                 "form": form,
                 "add_to_budget_form": add_to_budget_form,
-                "page_obj": page_obj,
-                "queryset": queryset
+                "page_obj": page_obj
+
             }
         )
 
@@ -259,17 +258,34 @@ class CategoryDetailView(PermissionRequiredMixin, View):
         )
 
 
-class DeleteProfileView(PermissionRequiredMixin, DeleteView):
+class DeleteProfileView(PermissionRequiredMixin, View):
     model = User
     template_name = "delete_profile.html"
     success_url = reverse_lazy("welcome")
     permission_required = "viewer.delete_profile"
 
+    def get(self, request, pk):
+        profile = self.request.user.profile
+        object = User.objects.get(profile=profile)
+        return render(
+            request, template_name="delete_profile.html",
+            context={
+                "object": object
+            }
+        )
+
+    def post(self, request, pk):
+        profile = self.request.user.profile
+        user = User.objects.get(id=pk)
+        user.delete()
+
+        return reverse_lazy("welcome")
+
 
 class EditProfileView(PermissionRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
-    template_name = "edit_profile.html"
+    template_name = "form.html"
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_profile"
 
@@ -280,7 +296,6 @@ class EditProfileView(PermissionRequiredMixin, UpdateView):
 
 class EditBudgetView(PermissionRequiredMixin, UpdateView):
     form_class = UpdateBudgetForm
-    # fields = ["name", "total_budget"]
     template_name = "edit_budget.html"
     success_url = reverse_lazy("home")
     permission_required = "viewer.change_budget"
