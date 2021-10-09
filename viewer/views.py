@@ -197,7 +197,7 @@ class SubmitableLoginView(LoginView):
 
 class SubmitableSignUpView(CreateView):
     form_class = SignUpForm
-    template_name = "form.html"
+    template_name = "sign_up.html"
     success_url = reverse_lazy("login")
 
 
