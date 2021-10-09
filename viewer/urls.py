@@ -29,7 +29,7 @@ from viewer.views import (
 urlpatterns = [
     path('', ProfileView.as_view(), name="home"),
     path('profile/edit/<pk>', EditProfileView.as_view(), name="edit_profile"),
-    path('profile/delete/<pk>', DeleteProfileView.as_view(), name="delete_profile"),
+    path('profile/delete', DeleteProfileView.as_view(), name="delete_profile"),
     path('change/passowrd', SubmittablePasswordChangeView.as_view(), name="change_password"),
     path('password_change/done/', PasswordChangeDoneView.as_view(), name='password_change_done'),
     path('password_reset/', PasswordResetView.as_view(), name='password_reset'),

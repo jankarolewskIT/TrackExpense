@@ -264,7 +264,7 @@ class DeleteProfileView(PermissionRequiredMixin, View):
     success_url = reverse_lazy("welcome")
     permission_required = "viewer.delete_profile"
 
-    def get(self, request, pk):
+    def get(self, request):
         profile = self.request.user.profile
         object = User.objects.get(profile=profile)
         return render(
@@ -274,12 +274,12 @@ class DeleteProfileView(PermissionRequiredMixin, View):
             }
         )
 
-    def post(self, request, pk):
+    def post(self, request):
         profile = self.request.user.profile
-        user = User.objects.get(id=pk)
+        user = User.objects.get(profile=profile)
         user.delete()
 
-        return reverse_lazy("welcome")
+        return redirect("welcome")
 
 
 class EditProfileView(PermissionRequiredMixin, UpdateView):

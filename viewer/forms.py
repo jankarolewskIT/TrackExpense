@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, UserCreationForm
+    UserCreationForm
 )
 from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
@@ -7,13 +7,13 @@ from django.db.transaction import atomic
 from django.forms import (
     CharField, DecimalField, NumberInput,
     TextInput, ModelForm, ChoiceField,
-    Select, DateField, IntegerField, BooleanField,
-    CheckboxInput, SelectDateWidget, RadioSelect, Form
+    Select, IntegerField, BooleanField,
+    CheckboxInput, Form
 
 )
 
-from viewer.models.profile import Profile
 from viewer.models.budget import Budget, Expence
+from viewer.models.profile import Profile
 
 
 # =====================================================================
@@ -215,9 +215,7 @@ class SignUpForm(UserCreationForm):
 class UpdateProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = [ "pay_day", "income"]
-
-
+        fields = ["pay_day", "income"]
 
     income = DecimalField(
         label="Enter Your income",
