@@ -6,25 +6,20 @@
 
 {% block content %}
     <form method="post">
-
         {% csrf_token %}
 
         <div class="form-group">
             {{ form.income.errors }}
             <label for="{{ form.income.id_for_label }}">Enter you Income</label>
-            {{ form.income }}
+            <p> {{ form.income }} </p>
         </div>
         <div class="form-group">
             {{ form.pay_day.errors }}
             <label for="{{ form.pay_day.id_for_label }}">Income day </label>
-            {{ form.pay_day }}
+            <p> {{ form.pay_day }} </p>
         </div>
-
-        <input type="submit" value="Save"
-               class="btn btn-success">
-
-        <a class="btn btn-success" href="{% url "home" %}" role="button">BACK</a>
-        <!-- <a href="{% url "home" %}">(<-- BACK)</a> -->
+        <input type="submit" value="Save" class="btn btn-success">
+        <a class="btn btn-success" href="{% url "home" %}" role="button">Back</a>
     </form>
 {% endblock %}
 

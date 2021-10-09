@@ -7,9 +7,22 @@
 
 {% block content %}
     <form method="post">
-     {% csrf_token %}
-        {{ form.as_p }}
-    <input type="submit" value="Save"
-           class="btn btn-primary">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            {{ form.username.errors }}
+            <label class="form-label" for="{{ form.username.id_for_label }}">User name:</label>
+            <p>{{ form.username }}</p>
+        </div>
+
+        <div class="form-group">
+            {{ form.password.errors }}
+            <label class="form-label" for="{{ form.password.id_for_label }}">Password:</label>
+            <p>{{ form.password }}</p>
+        </div>
+
+        <input type="submit" value="Save" class="btn btn-success">
+        <a class="btn btn-success" href="{% url "welcome" %}" role="button">Back</a>
     </form>
 {% endblock %}

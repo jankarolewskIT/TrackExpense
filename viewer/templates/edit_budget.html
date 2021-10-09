@@ -1,4 +1,4 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
     Edit {{ user.username }} budget
@@ -17,8 +17,9 @@
             <label for="{{ form.total_budget.id_for_label }}">Budget:</label>
             <p>{{ form.total_budget }}</p> <!-- wygenerowanie pola input -->
         </div>
-    <input type="submit" value="Save"
-           class="btn btn-success">
+        <input type="submit" value="Save"
+               class="btn btn-success">
+        <a class="btn btn-success" href="{% url "welcome" %}" role="button">Back</a>
     </form>
 
 {% endblock %}

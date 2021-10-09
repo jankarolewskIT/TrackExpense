@@ -99,15 +99,3 @@ strong {
 .unloged a {
   color: white;
 }
-
-.col-form-label p {
-  margin-bottom: 20px;
-}
-
-form input, select {
-  margin-bottom: 15px;
-}
-
-form label {
-  margin-bottom: 10px;
-}

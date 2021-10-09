@@ -53,9 +53,6 @@ class ExpenseEditView(PermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-
-
-
 def expense_delete(request, pk):
     instance = get_object_or_404(Expence, id=pk)
     budget = request.user.profile.budget
@@ -63,8 +60,6 @@ def expense_delete(request, pk):
     instance.delete()
     # budget.save()
     return redirect("home")
-
-
 
 
 def charts_pie(request):
@@ -99,7 +94,7 @@ class ExpenseStatView(View):
 
         # Transport Stat
         sum_transport = sum(map(lambda x: x.value, transport_query))
-        transport_in_budget = round(sum_transport / budget_value * 100,2)
+        transport_in_budget = round(sum_transport / budget_value * 100, 2)
 
         # Entertainment Stat
         sum_entertainment = sum(map(lambda x: x.value, entertainment_query))
@@ -111,7 +106,7 @@ class ExpenseStatView(View):
 
         # Clothes Stat
         sum_clothes = sum(map(lambda x: x.value, clothes_query))
-        clothes_in_budget = round(sum_clothes / budget_value * 100, 2 )
+        clothes_in_budget = round(sum_clothes / budget_value * 100, 2)
 
         # Food Stat
         sum_food = sum(map(lambda x: x.value, food_query))
@@ -125,7 +120,7 @@ class ExpenseStatView(View):
         other_in_budget = round(sum_other / budget_value * 100, 2)
 
         saves = budget_value - sum_all_expences
-        saves_in_budget = round(saves/budget_value * 100, 2)
+        saves_in_budget = round(saves / budget_value * 100, 2)
 
         return render(
             request, template_name="profile_stat.html",
@@ -143,10 +138,9 @@ class ExpenseStatView(View):
                 "health_in_budget": health_in_budget,
                 "clothes_in_budget": clothes_in_budget,
                 "food_in_budget": food_in_budget,
-                "accommodation_in_budget":accommodation_in_budget,
+                "accommodation_in_budget": accommodation_in_budget,
                 "other_in_budget": other_in_budget,
                 "saves_in_budget": saves_in_budget
-
 
             }
         )
