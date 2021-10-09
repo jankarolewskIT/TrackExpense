@@ -1,0 +1,89 @@
+{%  extends "base.html" %}
+
+{% block title %}
+    Edit {{ user.username }} profile
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+
+        {% csrf_token %}
+
+
+<div class="mb-3">
+  <label for="formGroupExampleInput" class="form-label">Example label</label>
+  <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
+</div>
+<div class="mb-3">
+  <label for="formGroupExampleInput2" class="form-label">Another label</label>
+  <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
+</div>
+
+        <div class="d-grid gap-3">
+  <div class="p-2 bg-light border">Grid item 1</div>
+  <div class="p-2 bg-light border">Grid item 2</div>
+  <div class="p-2 bg-light border">Grid item 3</div>
+</div>
+
+
+        <form class="row gy-2 gx-3 align-items-center">
+  <div class="col-auto">
+    <label class="visually-hidden" for="autoSizingInput">Name</label>
+    <input type="text" class="form-control" id="autoSizingInput" placeholder="Jane Doe">
+  </div>
+  <div class="col-auto">
+    <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+    <div class="input-group">
+      <div class="input-group-text">@</div>
+      <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username">
+    </div>
+  </div>
+  <div class="col-auto">
+    <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+    <select class="form-select" id="autoSizingSelect">
+      <option selected>Choose...</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+      <label class="form-check-label" for="autoSizingCheck">
+        Remember me
+      </label>
+    </div>
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+
+
+
+            <div class="form-group col-md-4">
+                {{ form.income.errors }}
+                <label for="{{ form.income.id_for_label }}">Enter you Income</label>
+                {{ form.income }} <!-- wygenerowanie pola input -->
+            </div>
+            <div class="form-group col-md-4">
+                {{ form.pay_day.errors }}
+                <label for="{{ form.pay_day.id_for_label }}">Income day</label>
+                {{ form.pay_day }} <!-- wygenerowanie pola input -->
+            </div>
+
+
+    <input type="submit" value="Zapisz"
+           class="btn btn-primary">
+
+      <a class="btn btn-primary" href="{% url "home" %}" role="button">BACK</a>
+    <!-- <a href="{% url "home" %}">(<-- BACK)</a> -->
+
+    </form>
+
+
+{% endblock %}
+
+
