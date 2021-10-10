@@ -1,18 +1,15 @@
-import json
-from datetime import datetime
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.core.paginator import Paginator
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, DetailView, CreateView, View, UpdateView
 
-from viewer.models.budget import Budget, Expence
-from viewer.models.profile import Profile
 from viewer.forms import SignUpForm, CreateExpenseForm, UpdateExpenseForm, UpdateBudgetForm, UpdateProfileForm, \
     UpdateTotalBudgetForm, FormPasswordChange
+from viewer.models.budget import Budget, Expence
+from viewer.models.profile import Profile
 
 
 class ExpenseCreateView(PermissionRequiredMixin, CreateView):
@@ -67,13 +64,27 @@ class ExpenseStatView(View):
         budget_value = self.request.user.profile.budget.total_budget
 
         expenses = Expence.objects.filter(budget=self.request.user.profile.budget)
+
         transport_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="TR")
+        category_transport = transport_query[0].category
+
         entertainment_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="ET")
+        category_entertainment = entertainment_query[0].category
+
         health_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="PH")
+        category_health = health_query[0].category
+
         clothes_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="CT")
+        category_clothes = clothes_query[0].category
+
         food_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="FD")
+        category_food = food_query[0].category
+
         accommodation_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="AD")
+        category_accommodation = accommodation_query[0].category
+
         other_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="OT")
+        category_other = other_query[0].category
 
         sum_all_expences = sum(map(lambda x: x.value, expenses))
 
@@ -125,7 +136,15 @@ class ExpenseStatView(View):
                 "food_in_budget": food_in_budget,
                 "accommodation_in_budget": accommodation_in_budget,
                 "other_in_budget": other_in_budget,
-                "saves_in_budget": saves_in_budget
+                "saves_in_budget": saves_in_budget,
+                "category_transport": category_transport,
+                "category_entertainment": category_entertainment,
+                "category_health": category_health,
+                "category_clothes": category_clothes,
+                "category_food": category_food,
+                "category_accommodation": category_accommodation,
+                "category_other": category_other
+
 
             }
         )
@@ -207,7 +226,20 @@ class CategoryDetailView(PermissionRequiredMixin, View):
         budget = self.request.user.profile.budget
         all_expenses = Expence.objects.filter(budget=budget)
         category_expenses = all_expenses.filter(category=category_short)
-        category = category_short
+
+        Category = {
+            "TR": "Transport",
+            "ET": "Entertainment",
+            "PH": "Health",
+            "CT": "Clothes",
+            "FD": "Food",
+            "AD": "Accommodation",
+            "OT": "Others"}
+
+        category = Category[category_short]
+        t = 0
+        # category = Expence.Catagory.choices[0][1]
+
         total_expenses = 0
         total_category_expenses = 0
         total_budget = self.request.user.profile.budget.total_budget

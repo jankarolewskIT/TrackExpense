@@ -48,23 +48,23 @@
                         <li class="list-group-item {% cycle 'list-group-item-dark' 'list-group-item-light' %} page-item">
                         <div class="row justify-content-center">
                             <div class="col">
-                                <a href="{% url "expence_detail" obj.id %}">{{ obj.name }}</a>
+                                <a href="{% url "expence_detail" obj.id %}" style="color: black; text-decoration: none">{{ obj.name }}</a>
                             </div>
                             <div class="col">
                                 {{ obj.value }}zł
                             </div>
                             <div class="col">
-                                <a href="{% url "category_detail" obj.category %}">{{ obj.category }}</a>
+                                <a href="{% url "category_detail" obj.category %}" style="color: black; text-decoration: none">{{ obj.category }}</a>
                             </div>
                             <div class="col">
                                 {{ obj.date | date:"d.m.Y" }}
                             </div>
                             <div class="col">
-                                <a href="{% url "edit_expense" obj.id %}">
+                                <a href="{% url "edit_expense" obj.id %}" style="color: black; text-decoration: none">
                                     <i class="bi bi-pencil-square">Edit</i>
                                 </a>
 
-                                <a href="{% url "delete_expense" obj.id %}">
+                                <a href="{% url "delete_expense" obj.id %}" style="color: black; text-decoration: none">
                                     <i class="bi bi-x-circle-fill">Delete</i>
                                 </a>
                             </div>

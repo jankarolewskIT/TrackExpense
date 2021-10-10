@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    <div class="d-flex justify-content-center" style="padding-bottom: 20px; font-size: 40px; font-weight: bolder">
+        {{ category }}
+    </div>
 
     {% if budget.name is not None and budget.name != "" %}
         {{ category }} in {{ budget.name }}
@@ -20,9 +23,9 @@
     </div>
 
     <div class="info-stat-category">
-        <p><strong>Sum wydatków w kategorii: {{ total_category_expenses }}zł</strong></p>
-        <p><strong>Udział wydatków kategorii do wszystkich wydatków: {{ category_to_all }}zł</strong></p>
-        <p><strong>Udział wydatków kategorii w budżecie: {{ category_to_budget }}zł </strong></p>
+        <p><strong>Sum wydatków w kategorii:</strong> {{ total_category_expenses }}zł</p>
+        <p><strong>Udział wydatków kategorii do wszystkich wydatków: </strong>{{ category_to_all }}%</p>
+        <p><strong>Udział wydatków kategorii w budżecie: </strong>{{ category_to_budget }}%</p>
     </div>
 
     <a class="btn btn-success" href="{% url "home" %}" role="button">Home</a>

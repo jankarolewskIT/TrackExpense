@@ -6,35 +6,52 @@
 
 
 {% block content %}
-    <div>
+    <div class="stat">
+    <a href="{% url "category_detail" category_transport %}" style="color: black; text-decoration: none">
     Transport {{ sum_transport }}zł
     <div class="progress" style="margin-bottom: 15px">
       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ transport_in_budget }}%" aria-valuenow="{{ transport_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ transport_in_budget }}%</div>
         </div>
-        Entertainment {{ sum_entertainment }}zł
-        <div class="progress" style="margin-bottom: 15px">
-          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{ entertainment_in_budget }}%" aria-valuenow="{{ entertainment_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ entertainment_in_budget }}%</div>
-        </div>
-        Accommodation {{ sum_accommodation }}zł
-        <div class="progress" style="margin-bottom: 15px">
-          <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: {{ accommodation_in_budget }}%" aria-valuenow="{{ accommodation_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ accommodation_in_budget }}%</div>
-        </div>
-        Clothes {{ sum_clothes }}zł
-        <div class="progress" style="margin-bottom: 15px">
-          <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: {{ clothes_in_budget }}%" aria-valuenow="{{ clothes_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ clothes_in_budget }}%</div>
-        </div>
-        Food {{ sum_food }}zł
-        <div class="progress" style="margin-bottom: 15px">
-          <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{ food_in_budget }}%" aria-valuenow="{{ food_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ food_in_budget }}%</div>
-        </div>
-        Health {{ sum_health }}zł
-        <div class="progress" style="margin-bottom: 15px">
-            <div class="progress-bar progress-bar-striped bg-dark progress-bar-animated" role="progressbar" style="width: {{ health_in_budget }}%" aria-valuenow="{{ health_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ health_in_budget }}%</div>
-        </div>
-        Other {{ sum_other }}zł
-        <div class="progress" style="margin-bottom: 15px">
-      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ other_in_budget }}%; background-color: #4a148c" aria-valuenow="{{ other_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ other_in_budget }}%</div>
-        </div>
+    </a>
+        <a href="{% url "category_detail" category_entertainment %}" style="color: black; text-decoration: none">
+            Entertainment {{ sum_entertainment }}zł
+            <div class="progress" style="margin-bottom: 15px">
+              <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: {{ entertainment_in_budget }}%" aria-valuenow="{{ entertainment_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ entertainment_in_budget }}%</div>
+            </div>
+        </a>
+
+        <a href="{%  url "category_detail" category_accommodation %}" style="color: black; text-decoration: none">
+            Accommodation {{ sum_accommodation }}zł
+            <div class="progress" style="margin-bottom: 15px">
+              <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: {{ accommodation_in_budget }}%" aria-valuenow="{{ accommodation_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ accommodation_in_budget }}%</div>
+            </div>
+        </a>
+        <a href="{% url "category_detail" category_clothes %}" style="color: black; text-decoration: none">
+            Clothes {{ sum_clothes }}zł
+            <div class="progress" style="margin-bottom: 15px">
+              <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" style="width: {{ clothes_in_budget }}%" aria-valuenow="{{ clothes_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ clothes_in_budget }}%</div>
+            </div>
+        </a>
+        <a href="{% url "category_detail" category_food %}" style="color: black; text-decoration: none">
+            Food {{ sum_food }}zł
+            <div class="progress" style="margin-bottom: 15px">
+              <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width: {{ food_in_budget }}%" aria-valuenow="{{ food_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ food_in_budget }}%</div>
+            </div>
+        </a>
+        <a href="{% url "category_detail" category_health %}" style="color: black; text-decoration: none">
+            Health {{ sum_health }}zł
+            <div class="progress" style="margin-bottom: 15px">
+                <div class="progress-bar progress-bar-striped bg-dark progress-bar-animated" role="progressbar" style="width: {{ health_in_budget }}%" aria-valuenow="{{ health_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ health_in_budget }}%</div>
+            </div>
+        </a>
+
+        <a href="{% url "category_detail" category_other %}" style="color: black; text-decoration: none">
+            Other {{ sum_other }}zł
+            <div class="progress" style="margin-bottom: 15px">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ other_in_budget }}%; background-color: #4a148c" aria-valuenow="{{ other_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ other_in_budget }}%</div>
+            </div>
+        </a>
+
         Savings {{ saves }}zł
         <div class="progress" style="margin-bottom: 15px">
       <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ saves_in_budget }}%; background-color: gold" aria-valuenow="{{ saves_in_budget }}" aria-valuemin="0" aria-valuemax="100">{{ saves_in_budget }}%</div>
