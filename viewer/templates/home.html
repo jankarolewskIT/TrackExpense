@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
     Welcome
@@ -6,7 +7,7 @@
 
 
 {% block content %}
-        <div class="row container" style="padding-bottom: 20px">
+        <div class="row" style="padding-bottom: 20px">
         <div class="col-lg-6 mx-auto">
 
             <p class="lead">
@@ -16,6 +17,9 @@
 
         </div>
         </div>
+    <div>
+        <img  class="" src="{% static "images/lokaty-bankowe-e1491471531166.jpg" %}">
+    </div>
     <p style="font-size: 40px"><strong>Funkcjonalności :</strong></p>
         <ul class="list-group">
             <li class="list-group-item">o  Prowadzenie ewidencji dochodów w podziale na: źródła dochodu (wypłata, stypendium, emerytura, ...), portfele (np. konto bankowe, gotówka) oraz daty uzyskania dochodu.</li>

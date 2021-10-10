@@ -66,25 +66,47 @@ class ExpenseStatView(View):
         expenses = Expence.objects.filter(budget=self.request.user.profile.budget)
 
         transport_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="TR")
-        category_transport = transport_query[0].category
+        if len(transport_query) > 0:
+            category_transport = transport_query[0].category
+        else:
+            category_transport = None
 
         entertainment_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="ET")
-        category_entertainment = entertainment_query[0].category
+        if len(entertainment_query) > 0:
+            category_entertainment = entertainment_query[0].category
+        else:
+            category_entertainment = None
 
         health_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="PH")
-        category_health = health_query[0].category
+        if len(health_query) > 0:
+            category_health = health_query[0].category
+        else:
+            category_health = None
 
         clothes_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="CT")
-        category_clothes = clothes_query[0].category
+        if len(clothes_query) > 0:
+            category_clothes = clothes_query[0].category
+        else:
+            category_clothes = None
 
         food_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="FD")
-        category_food = food_query[0].category
+        if len(food_query) > 0:
+            category_food = food_query[0].category
+        else:
+            category_food = None
+
 
         accommodation_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="AD")
-        category_accommodation = accommodation_query[0].category
+        if len(accommodation_query) > 0:
+            category_accommodation = accommodation_query[0].category
+        else:
+            category_accommodation = None
 
         other_query = Expence.objects.filter(budget=self.request.user.profile.budget).filter(category="OT")
-        category_other = other_query[0].category
+        if len(other_query) > 0:
+            category_other = other_query[0].category
+        else:
+            category_other = None
 
         sum_all_expences = sum(map(lambda x: x.value, expenses))
 
@@ -144,7 +166,6 @@ class ExpenseStatView(View):
                 "category_food": category_food,
                 "category_accommodation": category_accommodation,
                 "category_other": category_other
-
 
             }
         )
