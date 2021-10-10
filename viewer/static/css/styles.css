@@ -99,3 +99,12 @@ strong {
 .unloged a {
   color: white;
 }
+
+h1 {
+  font-size: x-large;
+}
+
+label {
+  margin-bottom: 15px;
+}
+

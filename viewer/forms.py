@@ -284,6 +284,13 @@ class UpdateBudgetForm(ModelForm):
 
 
 class UpdateTotalBudgetForm(Form):
+    def __init__(self, *args, **kwargs):
+        super(UpdateTotalBudgetForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form.control"
+
+
+
     class Meta:
         model = Budget
         fields = ["income"]
