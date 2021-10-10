@@ -145,6 +145,12 @@ class UpdateExpenseForm(ModelForm):
 
     )
 
+    def clean_value(self):
+        data = self.cleaned_data["value"]
+        if data > self.request.user.profile.budget.current_budget():
+            raise ValidationError("Budget not enough")
+        return data
+
     # def save(self, commit=True):
     #     budget = self.request.user.profile.budget
     #     budget.total_budget = float(budget.total_budget)
